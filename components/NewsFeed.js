@@ -1,4 +1,4 @@
-import React from 'react'
+import React from 'react';
 import { StyleSheet, Text, View, Dimensions, FlatList, Animated } from 'react-native';
 import { State, PanGestureHandler, Directions, GestureHandlerRootView } from 'react-native-gesture-handler';
 import ArticleCard from './ArticleCard';
