@@ -4,6 +4,7 @@ export const DATA = [
         data: [   
             {
                 title: 'Biden tears into Trump in January 6th speech',
+                publisher: 'cnn',
                 date: 'Nov 17th, 2020',
                 image_url:
                     'https://cdn.cnn.com/cnnnext/dam/assets/220106093511-04-biden-jan-6-speech-super-169.jpg',
@@ -13,6 +14,7 @@ export const DATA = [
             {
                 title: 
                     'Jan. 6th panel member launches reelection bid amid backdrop of insurrection anniversary',
+                publisher: 'cnn',
                 date: 'Thu, 06 Jan 2022',
                 image_url:
                     'https://cdn.cnn.com/cnnnext/dam/assets/220105134038-06-jan-6-committee-pivotal-year-luria-super-169.jpg',
@@ -22,6 +24,7 @@ export const DATA = [
             {
                 title: 
                     'Dick Cheney slams GOP over January 6th',
+                publisher: 'cnn',
                 date: 'Thu, 06 Jan 2022',
                 image_url:
                     'https://cdn.cnn.com/cnnnext/dam/assets/220106143222-dick-cheney-2015-file-super-169.jpeg',
@@ -31,6 +34,7 @@ export const DATA = [
             {
                 title: 
                     'Dick Cheney slams GOP over January 6th',
+                publisher: 'cnn',
                 date: 'Thu, 06 Jan 2022',
                 image_url:
                     'https://cdn.cnn.com/cnnnext/dam/assets/220106143222-dick-cheney-2015-file-super-169.jpeg',
@@ -45,6 +49,7 @@ export const DATA = [
             {
                 title:
                     'What to pack in your car to stay safe during severe winter weather',
+                publisher: 'cnn',
                 date: 'Mon, 06 Jan 2022',
                 image_url:
                     'https://cdn.cnn.com/cnnnext/dam/assets/220106143550-snow-car-preparedness-restricted-super-169.jpg',
@@ -59,6 +64,7 @@ export const DATA = [
             {
                 title:
                     'An "awful" month of Covid-19 lies ahead, doctor says, but "preventative measures will still be key"',
+                publisher: 'cnn',
                 date: 'Mon, 06 Jan 2022',
                 image_url:
                     'https://cdn.cnn.com/cnnnext/dam/assets/220106012140-massachusetts-covid-hospital-12292021-restricted-super-169.jpg',
@@ -68,6 +74,7 @@ export const DATA = [
             {
                 title:
                     'Hong Kong Disneyland closing for 2 weeks amid global Covid-19 surge',
+                publisher: 'cnn',
                 date: 'Mon, 06 Jan 2022',
                 image_url:
                     'https://cdn.cnn.com/cnnnext/dam/assets/200623124539-07-disneyland-hong-kong-reopening-super-169.jpg',
@@ -82,6 +89,7 @@ export const DATA = [
             {
                 title:
                     'An "awful" month of Covid-19 lies ahead, doctor says, but "preventative measures will still be key"',
+                publisher: 'cnn',
                 date: 'Mon, 06 Jan 2022',
                 image_url:
                     'https://cdn.cnn.com/cnnnext/dam/assets/220106012140-massachusetts-covid-hospital-12292021-restricted-super-169.jpg',
@@ -91,6 +99,7 @@ export const DATA = [
             {
                 title:
                     'Hong Kong Disneyland closing for 2 weeks amid global Covid-19 surge',
+                publisher: 'cnn',
                 date: 'Mon, 06 Jan 2022',
                 image_url:
                     'https://cdn.cnn.com/cnnnext/dam/assets/200623124539-07-disneyland-hong-kong-reopening-super-169.jpg',

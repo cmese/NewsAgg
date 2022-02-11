@@ -15,7 +15,10 @@ const AnimatedHeader = ({ scrollY, data, verticalScrollDistance }) => {
         {data.map((item, index) => {
           return (
             <Animated.View key={index} style={styles.headerContainer}>
-              <Text style={[styles.headerText]}>
+              <Text 
+                style={[styles.headerText]}
+                adjustsFontSizeToFit
+              >
                 {item.title}
               </Text>
             </Animated.View>

@@ -3,33 +3,39 @@ import { StyleSheet, Text, View, Dimensions, FlatList, Animated } from 'react-na
 import { State, PanGestureHandler, Directions, GestureHandlerRootView } from 'react-native-gesture-handler';
 import ArticleCard from './ArticleCard';
 import AnimatedHeader from './AnimatedHeader';
-
+//import { bottomTabsHeight } from './BottomTabs';
 const { height, width } = Dimensions.get('window');
 
-const ITEM_WIDTH = width * 0.9;
-const ITEM_HEIGHT = ITEM_WIDTH * 1.5;
-const VERTICAL_LIST_ITEM_HEIGHT = ITEM_HEIGHT * 1.2;
-const VISIBLE_ITEMS = 3;
+//const listHeight = height - bottomTabsHeight;
+
+
+//const ITEM_WIDTH = '80%';
+const ITEM_WIDTH = width * 0.8;
+//const ITEM_HEIGHT = '65%';
+const ITEM_HEIGHT = height * 0.55;
+const VERTICAL_CELL_HEIGHT = height * 0.75;
+const VISIBLE_ITEMS = 5;
 
 const NewsFeed = ({data}) => {
   const scrollYAnimated = React.useRef(new Animated.Value(0)).current;
 
   return (
     <GestureHandlerRootView>
-      <AnimatedHeader scrollY={scrollYAnimated} data={data} verticalScrollDistance={VERTICAL_LIST_ITEM_HEIGHT}/>
+      <AnimatedHeader scrollY={scrollYAnimated} data={data} verticalScrollDistance={VERTICAL_CELL_HEIGHT}/>
       <FlatList
         data={data}
         keyExtractor={(_, index) => String(index)}
         showsVerticalScrollIndicator={false}
-        snapToInterval={VERTICAL_LIST_ITEM_HEIGHT}
+        snapToInterval={VERTICAL_CELL_HEIGHT}
         snapToAlignment={'start'}
         decelerationRate={'fast'}
-        contentContainerStyle={{ paddingBottom: 150 }}
+        contentContainerStyle={{ paddingBottom: 150, maxheight: VERTICAL_CELL_HEIGHT }}
         onScroll={Animated.event(
           [{ nativeEvent: { contentOffset: { y: scrollYAnimated } } }],
           {
             listener: (event)=>{
               //console.log("scrollYAnimated: ", scrollYAnimated);
+              console.log("listheight: ", height);
             },
             useNativeDriver: false 
           }
@@ -88,12 +94,17 @@ const HorizontalArticleList = ({item}) => {
           }
         }}
       >
-        <View style={{
-          backgroundColor: 'orange',
-          height: VERTICAL_LIST_ITEM_HEIGHT,
-          flexDirection: 'row',
-          alignItems: 'center',
-          justifyContent: 'center',
+        <View
+          onLayout={(event) => {
+            console.log("view height: ", event.nativeEvent.layout.height);
+          }}
+          style={{
+            backgroundColor: 'orange',
+            height: VERTICAL_CELL_HEIGHT,
+            flexDirection: 'column',
+            borderRadius: 10,
+            //alignItems: 'center',
+            justifyContent: 'center',
         }}>
           <FlatList
             data={item.data}
@@ -106,7 +117,7 @@ const HorizontalArticleList = ({item}) => {
               const cellStyle = [
                 style,
                 { zIndex: item.data.length - index,
-                  alignItems: 'center',
+                  justifyContent: 'center',
                 },
               ];
               return (
@@ -117,6 +128,10 @@ const HorizontalArticleList = ({item}) => {
             }}
             renderItem={({ item, index }) => {
               const inputRange = [index - 1, index, index + 1];
+              const translateY = scrollXAnimated.interpolate({
+                inputRange,
+                outputRange: [-60, 0, 100],
+              });
               const translateX = scrollXAnimated.interpolate({
                 inputRange,
                 outputRange: [50, 0, -100],
@@ -130,7 +145,7 @@ const HorizontalArticleList = ({item}) => {
                 outputRange: [0.8, 1, 1.3],
               });
               return (
-                <ArticleCard item={item} translateX={translateX} opacity={opacity} scale={scale} cardHeight={ITEM_HEIGHT} cardWidth={ITEM_WIDTH}/>
+                <ArticleCard item={item} translateY={translateY} translateX={translateX} opacity={opacity} scale={scale} cardHeight={ITEM_HEIGHT} cardWidth={ITEM_WIDTH} maxHeight={VERTICAL_CELL_HEIGHT*0.75}/>
               );
             }}
           />
