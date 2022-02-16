@@ -40,6 +40,26 @@ export const DATA = [
                     'https://cdn.cnn.com/cnnnext/dam/assets/220106143222-dick-cheney-2015-file-super-169.jpeg',
                 description:
                     'Former Republican Vice President Dick Cheney and his daughter Rep. Liz Cheney (R-WY) were the only two Republi  cans on the House floor during a rememberance of the January 6th riot.'
+            },
+            {
+                title: 
+                    'Dick Cheney slams GOP over January 6th',
+                publisher: 'cnn',
+                date: 'Thu, 06 Jan 2022',
+                image_url:
+                    'https://cdn.cnn.com/cnnnext/dam/assets/220106143222-dick-cheney-2015-file-super-169.jpeg',
+                description:
+                    'Former Republican Vice President Dick Cheney and his daughter Rep. Liz Cheney (R-WY) were the only two Republi  cans on the House floor during a rememberance of the January 6th riot.'
+            },
+            {
+                title: 
+                    'Dick Cheney slams GOP over January 6th',
+                publisher: 'cnn',
+                date: 'Thu, 06 Jan 2022',
+                image_url:
+                    'https://cdn.cnn.com/cnnnext/dam/assets/220106143222-dick-cheney-2015-file-super-169.jpeg',
+                description:
+                    'Former Republican Vice President Dick Cheney and his daughter Rep. Liz Cheney (R-WY) were the only two Republi  cans on the House floor during a rememberance of the January 6th riot.'
             }
         ]
     },
