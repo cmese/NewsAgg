@@ -1,26 +1,21 @@
 import React from 'react';
 import { View, Text, Image, Dimensions, Animated, StyleSheet } from 'react-native';
-const { height, width } = Dimensions.get('window');
 
 const TEXT_SPACING = 5;
 
-const ArticleCard = ({item, itemWidth, itemHeight, translateY}) => {
+const ArticleCard = ({item, itemWidth, itemHeight, translateY, translateX, opacity, scale}) => {
   return (
     <View 
-      onLayout={(event) => {
-        console.log("ARTICLECARD WIDTH: ", event.nativeEvent.layout.width);
-        console.log("otherWidth: ", itemWidth);
+      style={{
+        minHeight: itemHeight, 
+        width: itemWidth, 
+        marginBottom: 10, 
+        backgroundColor: 'white',
       }}
-      style={{ minHeight: itemHeight, width: itemWidth, marginBottom: 10, backgroundColor: 'white' }}
       >
       <Animated.View
         style={{
-          //position: 'absolute',
-          //width: '90%',
-          //height: cardHeight,
-          //width: ITEM_WIDTH,
-          //maxHeight: itemWidth*1.3,
-          //height: '100%',
+          position: 'absolute',
           alignItems: 'center',
           maxHeight: itemHeight,
           minHeight: itemHeight,
@@ -28,11 +23,11 @@ const ArticleCard = ({item, itemWidth, itemHeight, translateY}) => {
           //top: -cardHeight/2.2,
           borderRadius: 10,
           overflow: 'hidden',
-          //transform: [{ translateY }, ],
+          transform: [{ translateX }, { scale } ],
+          //transform: [{ translateY }, { translateX }, { scale } ],
+          //opacity,
           backgroundColor: 'pink',
           marginHorizontal: TEXT_SPACING,
-          //flexShrink: 1,
-          //paddingBottom: 30,
         }}
       >
         <Image

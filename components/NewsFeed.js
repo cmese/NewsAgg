@@ -11,6 +11,7 @@ console.log("window width: ", width);
 console.log("ITEM_WIDTH: ", ITEM_WIDTH);
 //const VERTICAL_CELL_HEIGHT = ITEM_WIDTH*1.5;
 const VERTICAL_CELL_HEIGHT = height * 0.8;
+const VISIBLE_ITEMS = 3;
 //const carouselMargin=(VERTICAL_CELL_HEIGHT-VERTICAL_CELL_HEIGHT*0.75)/4
 
 const NewsFeed = ({data}) => {
@@ -80,14 +81,52 @@ const HorizontalArticleList = ({item}) => {
           [{ nativeEvent: { contentOffset: { x: scrollX } } }],
           { useNativeDriver: true }
         )}
-        renderItem={({ item, index }) => {
+        CellRendererComponent={({ children, index, style, ...props }) => {
+          const cellStyle = [
+            style,
+            { 
+              zIndex: item.data.length - index,
+              justifyContent: 'center',
+            },
+          ];
           return (
-            <View 
-              style={{
-              }}
-            >
-            <ArticleCard item={item} itemWidth={ITEM_WIDTH} itemHeight={VERTICAL_CELL_HEIGHT*0.8}/>
+            <View style={cellStyle} index={index} {...props}>
+              {children}
             </View>
+          );
+        }}
+        renderItem={({ item, index }) => {
+          const inputRange = [
+            (index - 1) * ITEM_WIDTH, 
+            index * ITEM_WIDTH, 
+            (index + 1) * ITEM_WIDTH,
+          ];
+          const translateY = scrollX.interpolate({
+            inputRange,
+            outputRange: [-60, 0, 100],
+          });
+          const translateX = scrollX.interpolate({
+            inputRange,
+            outputRange: [-50, 0, 10],
+          });
+          const opacity = scrollX.interpolate({
+            inputRange,
+            outputRange: [1 - 1 / VISIBLE_ITEMS, 1, 0],
+          });
+          const scale = scrollX.interpolate({
+            inputRange,
+            outputRange: [0.8, 1, 1.3],
+          });
+          return (
+            <ArticleCard 
+              item={item}
+              itemWidth={ITEM_WIDTH}
+              itemHeight={VERTICAL_CELL_HEIGHT*0.8}
+              translateY={translateY} 
+              translateX={translateX}
+              opacity={opacity}
+              scale={scale}
+            />
           );
         }}
       />
@@ -95,6 +134,8 @@ const HorizontalArticleList = ({item}) => {
         bottom: 10,
         backgroundColor: 'red',
         minHeight: VERTICAL_CELL_HEIGHT*0.10,
+        //flexShrink: 1,
+        marginRight: -(width/2 - width/7/2),
       }}>
         <PublisherCarousel articles={item.data} scrollX={scrollX} scrollWidth={ITEM_WIDTH}/>
       </View>

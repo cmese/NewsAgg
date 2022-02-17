@@ -14,6 +14,8 @@ const PublisherCarousel = ({articles, scrollX, scrollWidth}) => {
       horizontal
       contentContainerStyle={{
         alignItems: 'center',
+        backgroundColor: 'pink',
+        paddingHorizontal: width/2 - width/7/2,
       }}
       scrollEnabled={false}
       renderItem={({item, index}) => {
@@ -48,6 +50,8 @@ const PublisherCarousel = ({articles, scrollX, scrollWidth}) => {
               borderRadius: 23,
               borderColor: 'black',
               borderWidth: 2,
+              overflow: 'visible',
+              //marginHorizontal: SPACING
               transform: [
                 { translateX },
                 { scale }
