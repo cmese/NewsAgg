@@ -6,7 +6,7 @@ import AnimatedHeader from './AnimatedHeader';
 import PublisherCarousel from './PublisherCarousel';
 const { height, width } = Dimensions.get('window');
 
-const ITEM_WIDTH = width * 0.9;
+const ITEM_WIDTH = width * 0.8;
 console.log("window width: ", width);
 console.log("ITEM_WIDTH: ", ITEM_WIDTH);
 //const VERTICAL_CELL_HEIGHT = ITEM_WIDTH*1.5;
@@ -71,10 +71,14 @@ const HorizontalArticleList = ({item}) => {
         data={item.data}
         keyExtractor={(_, index) => String(index)}
         horizontal
+        //inverted
         snapToInterval={ITEM_WIDTH}
         snapToAlignment={'start'}
         style={{flexBasis: '50%',}}
+        removeClippedSubviews={false}
         contentContainerStyle={{
+          //flex: 1,
+          //justifyContent: 'center',
           alignItems: 'center',
         }}
         onScroll={Animated.event(
@@ -82,11 +86,13 @@ const HorizontalArticleList = ({item}) => {
           { useNativeDriver: true }
         )}
         CellRendererComponent={({ children, index, style, ...props }) => {
+          console.log("zindex: ", item.data.length - index);
           const cellStyle = [
             style,
             { 
               zIndex: item.data.length - index,
-              justifyContent: 'center',
+              elevation: item.data.length - index,
+              //justifyContent: 'center',
             },
           ];
           return (
@@ -107,7 +113,7 @@ const HorizontalArticleList = ({item}) => {
           });
           const translateX = scrollX.interpolate({
             inputRange,
-            outputRange: [-50, 0, 10],
+            outputRange: [-ITEM_WIDTH*.8, 0, ITEM_WIDTH*.8],
           });
           const opacity = scrollX.interpolate({
             inputRange,
@@ -116,6 +122,7 @@ const HorizontalArticleList = ({item}) => {
           const scale = scrollX.interpolate({
             inputRange,
             outputRange: [0.8, 1, 1.3],
+            //extrapolate: 'clamp'
           });
           return (
             <ArticleCard 

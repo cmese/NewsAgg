@@ -2,18 +2,25 @@ import React from 'react';
 import { View, Text, Image, Dimensions, Animated, StyleSheet } from 'react-native';
 
 const TEXT_SPACING = 5;
+const { height, width } = Dimensions.get('window');
 
 const ArticleCard = ({item, itemWidth, itemHeight, translateY, translateX, opacity, scale}) => {
   return (
-    <View 
+    <Animated.View 
       style={{
         minHeight: itemHeight, 
         width: itemWidth, 
         marginBottom: 10, 
-        backgroundColor: 'white',
+        //backgroundColor: 'white',
+        borderWidth: 2,
+        transform: [{ translateX }, { scale } ],
+        opacity,
+        //position: 'absolute',
+        left: (width-itemWidth)/2, 
+
       }}
-      >
-      <Animated.View
+    >
+      <View
         style={{
           position: 'absolute',
           alignItems: 'center',
@@ -23,7 +30,7 @@ const ArticleCard = ({item, itemWidth, itemHeight, translateY, translateX, opaci
           //top: -cardHeight/2.2,
           borderRadius: 10,
           overflow: 'hidden',
-          transform: [{ translateX }, { scale } ],
+          //transform: [{ translateX }, { scale } ],
           //transform: [{ translateY }, { translateX }, { scale } ],
           //opacity,
           backgroundColor: 'pink',
@@ -60,8 +67,8 @@ const ArticleCard = ({item, itemWidth, itemHeight, translateY, translateX, opaci
             {item.description}
           </Text>
         </View>
-      </Animated.View>
-    </View>
+      </View>
+    </Animated.View>
   );
 }
 
