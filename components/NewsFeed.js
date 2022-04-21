@@ -7,14 +7,16 @@ import PublisherCarousel from './PublisherCarousel';
 const { height, width } = Dimensions.get('window');
 
 const ITEM_WIDTH = width * 0.8;
-console.log("window width: ", width);
-console.log("ITEM_WIDTH: ", ITEM_WIDTH);
+//console.log("window width: ", width);
+//console.log("ITEM_WIDTH: ", ITEM_WIDTH);
 //const VERTICAL_CELL_HEIGHT = ITEM_WIDTH*1.5;
 const VERTICAL_CELL_HEIGHT = height * 0.8;
 const VISIBLE_ITEMS = 3;
 //const carouselMargin=(VERTICAL_CELL_HEIGHT-VERTICAL_CELL_HEIGHT*0.75)/4
 
 const NewsFeed = ({data}) => {
+  console.log("[NEWSFEED] : ", data);
+  console.log("[NEWSFEED END]");
   const scrollYAnimated = React.useRef(new Animated.Value(0)).current;
   return (
     <View>
@@ -34,7 +36,7 @@ const NewsFeed = ({data}) => {
           {
             listener: (event)=>{
               //console.log("scrollYAnimated: ", scrollYAnimated);
-              console.log("listheight: ", height);
+              //console.log("listheight: ", height);
             },
             useNativeDriver: true
           }
@@ -58,7 +60,7 @@ const HorizontalArticleList = ({item}) => {
     //change this view to cell renderercomponent in flatlist
     <View
       onLayout={(event) => {
-        console.log("view height: ", event.nativeEvent.layout.height);
+        //console.log("view height: ", event.nativeEvent.layout.height);
       }}
       style={{
         backgroundColor: 'orange',
@@ -68,7 +70,8 @@ const HorizontalArticleList = ({item}) => {
         height: VERTICAL_CELL_HEIGHT, 
     }}>
       <Animated.FlatList
-        data={item.data}
+        //data={item.data}
+        data={item.articles}
         keyExtractor={(_, index) => String(index)}
         horizontal
         //inverted
@@ -86,12 +89,12 @@ const HorizontalArticleList = ({item}) => {
           { useNativeDriver: true }
         )}
         CellRendererComponent={({ children, index, style, ...props }) => {
-          console.log("zindex: ", item.data.length - index);
+          //console.log("zindex: ", item.data.length - index);
           const cellStyle = [
             style,
             { 
-              zIndex: item.data.length - index,
-              elevation: item.data.length - index,
+              zIndex: item.articles.length - index,
+              elevation: item.articles.length - index,
               //justifyContent: 'center',
             },
           ];
@@ -144,7 +147,7 @@ const HorizontalArticleList = ({item}) => {
         //flexShrink: 1,
         marginRight: -(width/2 - width/7/2),
       }}>
-        <PublisherCarousel articles={item.data} scrollX={scrollX} scrollWidth={ITEM_WIDTH}/>
+        <PublisherCarousel articles={item.articles} scrollX={scrollX} scrollWidth={ITEM_WIDTH}/>
       </View>
     </View>
   );

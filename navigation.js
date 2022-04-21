@@ -19,7 +19,7 @@ const screenOptions = {
   headerShown: false,
 }*/
 
-const NavStack = () => (
+const NavStack = ({data}) => (
   <NavigationContainer>
     <TabNav.Navigator
       initialRouteName='Trending'
@@ -46,7 +46,7 @@ const NavStack = () => (
     >
       <TabNav.Screen name='Tech' component={TechScreen} />
       <TabNav.Screen name='Politics' component={PoliticsScreen} />
-      <TabNav.Screen name='Trending' component={HomeScreen} />
+      <TabNav.Screen name='Trending' component={() => <HomeScreen data={data} />} />
       <TabNav.Screen name='Sports' component={SportsScreen} />
       <TabNav.Screen name='Business' component={BusinessScreen} />
     </TabNav.Navigator>

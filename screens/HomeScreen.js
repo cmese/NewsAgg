@@ -2,11 +2,12 @@ import React from 'react'
 import { View, Text, SafeAreaView } from 'react-native'
 import NewsFeed from '../components/NewsFeed'
 import { DATA } from '../data/dummy'
-
+import { getRecentTrends } from '../data/dummy'
 //const screenName = "HomeScreen";
 
-const HomeScreen = () => {
-  const [data, setData] = React.useState(DATA);
+const HomeScreen = ({data}) => {
+  //const [data, setData] = React.useState(DATA);
+
   return (
     <View style={{flex:1}}>
       <NewsFeed data={data}/>

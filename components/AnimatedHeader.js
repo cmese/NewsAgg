@@ -19,7 +19,7 @@ const AnimatedHeader = ({ scrollY, data, verticalScrollDistance }) => {
                 style={[styles.headerText]}
                 adjustsFontSizeToFit
               >
-                {item.title}
+                {item.name}
               </Text>
             </Animated.View>
           );

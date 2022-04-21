@@ -38,7 +38,7 @@ const ArticleCard = ({item, itemWidth, itemHeight, translateY, translateX, opaci
         }}
       >
         <Image
-          source={{ uri: item.image_url }}
+          source={{ uri: item.imageURL }}
           style={styles.articleImg}
           //style={{ width: '100%', height: '60%', resizeMode: 'cover', }}
         />
