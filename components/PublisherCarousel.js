@@ -14,7 +14,7 @@ const PublisherCarousel = ({articles, scrollX, scrollWidth}) => {
       horizontal
       contentContainerStyle={{
         alignItems: 'center',
-        backgroundColor: 'pink',
+        //backgroundColor: 'pink',
         paddingHorizontal: width/2 - width/7/2,
       }}
       scrollEnabled={false}
@@ -46,10 +46,10 @@ const PublisherCarousel = ({articles, scrollX, scrollWidth}) => {
           <Animated.View 
             style={{
               width: ITEM_SIZE,
-              backgroundColor: 'white',
+              //backgroundColor: 'white',
               borderRadius: 23,
               borderColor: 'black',
-              borderWidth: 2,
+              //borderWidth: 2,
               overflow: 'visible',
               //marginHorizontal: SPACING
               transform: [
@@ -71,7 +71,6 @@ const PublisherCarousel = ({articles, scrollX, scrollWidth}) => {
               <Text styles={styles.publisherName}>{item.publisher}</Text>
             </View>  
           </Animated.View>
-         // <Text>hello</Text>
         );
       }}
     />

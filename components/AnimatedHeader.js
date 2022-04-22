@@ -10,8 +10,17 @@ const AnimatedHeader = ({ scrollY, data, verticalScrollDistance }) => {
     outputRange: [0, -HEADER_HEIGHT],
   });
   return (
-    <View style={{ height: HEADER_HEIGHT, overflow: 'hidden' }}>
-      <Animated.View style={{ transform: [{ translateY }], backgroundColor: 'cyan',}}>
+    <View 
+      style={{ 
+        height: HEADER_HEIGHT,
+        overflow: 'hidden',
+      }}
+    >
+      <Animated.View 
+        style={{ 
+          transform: [{ translateY }],
+        }}
+      >
         {data.map((item, index) => {
           return (
             <Animated.View key={index} style={styles.headerContainer}>
@@ -33,7 +42,7 @@ const styles = StyleSheet.create({
   headerContainer: {
     height: HEADER_HEIGHT,
     justifyContent: 'center',
-    paddingLeft: TEXT_SPACING*2,
+    paddingLeft: TEXT_SPACING,
   },
   headerText: {
     fontSize: 40,

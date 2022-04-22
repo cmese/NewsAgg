@@ -4,18 +4,30 @@ import { View, Text, Image, Dimensions, Animated, StyleSheet } from 'react-nativ
 const TEXT_SPACING = 5;
 const { height, width } = Dimensions.get('window');
 
+const shadowColor = {
+  "cnn" : 'red',
+  "fox" : 'blue',
+};
 const ArticleCard = ({item, itemWidth, itemHeight, translateY, translateX, opacity, scale}) => {
   return (
     <Animated.View 
       style={{
         minHeight: itemHeight, 
         width: itemWidth, 
-        marginBottom: 10, 
         //backgroundColor: 'white',
-        borderWidth: 2,
+        borderRadius: 16,
+        overflow: 'hidden',
+        //shadowColor: 'black',
+        shadowColor: shadowColor[item.publisher],
+        shadowOpacity: .1,
+        shadowOffset: {
+          width: 0,
+          height: 0,
+        },
+        shadowRadius: 4,
+        elevation: 15,
         transform: [{ translateX }, { scale } ],
         opacity,
-        //position: 'absolute',
         left: (width-itemWidth)/2, 
 
       }}
@@ -23,18 +35,7 @@ const ArticleCard = ({item, itemWidth, itemHeight, translateY, translateX, opaci
       <View
         style={{
           position: 'absolute',
-          alignItems: 'center',
-          maxHeight: itemHeight,
-          minHeight: itemHeight,
-          flexGrow: 1,
-          //top: -cardHeight/2.2,
-          borderRadius: 10,
-          overflow: 'hidden',
-          //transform: [{ translateX }, { scale } ],
-          //transform: [{ translateY }, { translateX }, { scale } ],
-          //opacity,
-          backgroundColor: 'pink',
-          marginHorizontal: TEXT_SPACING,
+          height: itemHeight,
         }}
       >
         <Image
@@ -76,19 +77,11 @@ const styles = StyleSheet.create({
   textContainer: {
     flexBasis: '40%',
     flexGrow: 1,
-    //flexShrink: 1,
-    //flex: 1,
-    //height: '100%',
-    //flexGrow: 3,
-    //flexDirection: 'column',
   },
   articleImg: {
     width: '100%', 
-    //height: '60%',
-    //height: ITEM_WIDTH/1.5,
     resizeMode:'cover',
     margin: 0,
-    marginBottom: 10,
     flexGrow: 1,
     flexShrink: 1,
     flexBasis: '60%',
@@ -109,7 +102,6 @@ const styles = StyleSheet.create({
     paddingTop: 5,
     backgroundColor: 'yellow',
     flexBasis: '15%',
-    //maxHeight: 20,
     flexShrink: 1,
     flexGrow: 1,
   },
@@ -118,11 +110,9 @@ const styles = StyleSheet.create({
     paddingTop: 5,
     paddingBottom: 10,
     backgroundColor: 'purple',
-    //flexDirection: 'row',
     flexBasis: '50%',
     flexGrow: 2,
     flexShrink: 1,
-    //flexGrow: 1
   },
 });
 

@@ -1,19 +1,13 @@
 import React from 'react';
-import { StyleSheet, Text, View, Dimensions, FlatList, Animated } from 'react-native';
-import { State, PanGestureHandler, Directions, GestureHandlerRootView } from 'react-native-gesture-handler';
+import { Image, StyleSheet, Text, View, Dimensions, FlatList, Animated } from 'react-native';
 import ArticleCard from './ArticleCard';
 import AnimatedHeader from './AnimatedHeader';
 import PublisherCarousel from './PublisherCarousel';
 const { height, width } = Dimensions.get('window');
-
+const EMPTY_ITEM_SIZE = width*.2;
 const ITEM_WIDTH = width * 0.8;
-//console.log("window width: ", width);
-//console.log("ITEM_WIDTH: ", ITEM_WIDTH);
-//const VERTICAL_CELL_HEIGHT = ITEM_WIDTH*1.5;
 const VERTICAL_CELL_HEIGHT = height * 0.8;
 const VISIBLE_ITEMS = 3;
-//const carouselMargin=(VERTICAL_CELL_HEIGHT-VERTICAL_CELL_HEIGHT*0.75)/4
-
 const NewsFeed = ({data}) => {
   console.log("[NEWSFEED] : ", data);
   console.log("[NEWSFEED END]");
@@ -41,7 +35,6 @@ const NewsFeed = ({data}) => {
             useNativeDriver: true
           }
         )}
-        //pagingEnabled={true}
         renderItem={({item}) => {
           return (
             <HorizontalArticleList item={item}/>
@@ -58,26 +51,52 @@ const HorizontalArticleList = ({item}) => {
 
   return ( 
     //change this view to cell renderercomponent in flatlist
-    <View
+    <Animated.View
       onLayout={(event) => {
         //console.log("view height: ", event.nativeEvent.layout.height);
       }}
       style={{
-        backgroundColor: 'orange',
+        //backgroundColor: backgroundPubColor,
         flexGrow: 1,
         //alignContent: 'center',
         borderRadius: 10,
         height: VERTICAL_CELL_HEIGHT, 
-    }}>
+      }}>
+      <View style={StyleSheet.absoluteFillObject}>
+        {item.articles.map((article, index) => {
+          const inputRange = [
+            (index -1) * width,
+            index * width,
+            (index + 1) * width
+          ]
+          const opacity = scrollX.interpolate({
+            inputRange,
+            outputRange: [0, 1, 0]
+          })
+          return <Animated.Image
+            key={`image-${index}`}
+            source={{uri: article.imageURL}}
+            style={[
+              StyleSheet.absoluteFillObject,
+              {
+                opacity
+              }
+            ]}
+            blurRadius={5}
+          />
+        })}
+      </View>
       <Animated.FlatList
-        //data={item.data}
-        data={item.articles}
+        data={[...item.articles, { key: 'empty-right' }]}
         keyExtractor={(_, index) => String(index)}
         horizontal
         //inverted
         snapToInterval={ITEM_WIDTH}
         snapToAlignment={'start'}
-        style={{flexBasis: '50%',}}
+        style={{
+          flexBasis: '50%',
+          //backgroundColor: 'red',
+        }}
         removeClippedSubviews={false}
         contentContainerStyle={{
           //flex: 1,
@@ -89,7 +108,6 @@ const HorizontalArticleList = ({item}) => {
           { useNativeDriver: true }
         )}
         CellRendererComponent={({ children, index, style, ...props }) => {
-          //console.log("zindex: ", item.data.length - index);
           const cellStyle = [
             style,
             { 
@@ -105,6 +123,9 @@ const HorizontalArticleList = ({item}) => {
           );
         }}
         renderItem={({ item, index }) => {
+          if (item.key === 'empty-right') {
+            return <View style={{ width: EMPTY_ITEM_SIZE }} />;
+          }
           const inputRange = [
             (index - 1) * ITEM_WIDTH, 
             index * ITEM_WIDTH, 
@@ -142,14 +163,13 @@ const HorizontalArticleList = ({item}) => {
       />
       <View style={{
         bottom: 10,
-        backgroundColor: 'red',
+        //backgroundColor: 'red',
         minHeight: VERTICAL_CELL_HEIGHT*0.10,
-        //flexShrink: 1,
         marginRight: -(width/2 - width/7/2),
       }}>
         <PublisherCarousel articles={item.articles} scrollX={scrollX} scrollWidth={ITEM_WIDTH}/>
       </View>
-    </View>
+    </Animated.View>
   );
 }
 
