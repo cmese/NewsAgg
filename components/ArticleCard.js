@@ -10,10 +10,10 @@ const shadowColor = {
 };
 const ArticleCard = ({item, itemWidth, itemHeight, translateY, translateX, opacity, scale}) => {
   return (
-    <Animated.View 
+    <Animated.View
       style={{
-        minHeight: itemHeight, 
-        width: itemWidth, 
+        minHeight: itemHeight,
+        width: itemWidth,
         //backgroundColor: 'white',
         borderRadius: 16,
         overflow: 'hidden',
@@ -28,7 +28,7 @@ const ArticleCard = ({item, itemWidth, itemHeight, translateY, translateX, opaci
         elevation: 15,
         transform: [{ translateX }, { scale } ],
         opacity,
-        left: (width-itemWidth)/2, 
+        left: (width-itemWidth)/2,
 
       }}
     >
@@ -98,7 +98,7 @@ const styles = StyleSheet.create({
   articleDateText: {
     fontSize: 20,
     fontStyle: 'italic',
-    fontWeight: '800', 
+    fontWeight: '800',
     paddingTop: 5,
     backgroundColor: 'yellow',
     flexBasis: '15%',
@@ -109,7 +109,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     paddingTop: 5,
     paddingBottom: 10,
-    backgroundColor: 'purple',
+    backgroundColor: 'orange',
     flexBasis: '50%',
     flexGrow: 2,
     flexShrink: 1,

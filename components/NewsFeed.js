@@ -8,7 +8,7 @@ const EMPTY_ITEM_SIZE = width*.2;
 const ITEM_WIDTH = width * 0.8;
 const VERTICAL_CELL_HEIGHT = height * 0.8;
 const VISIBLE_ITEMS = 3;
-const NewsFeed = ({data}) => {
+const NewsFeed = ({data, category}) => {
   console.log("[NEWSFEED] : ", data);
   console.log("[NEWSFEED END]");
   const scrollYAnimated = React.useRef(new Animated.Value(0)).current;
@@ -49,7 +49,7 @@ const NewsFeed = ({data}) => {
 const HorizontalArticleList = ({item}) => {
   const scrollX = React.useRef(new Animated.Value(0)).current;
 
-  return ( 
+  return (
     //change this view to cell renderercomponent in flatlist
     <Animated.View
       onLayout={(event) => {
@@ -60,7 +60,7 @@ const HorizontalArticleList = ({item}) => {
         flexGrow: 1,
         //alignContent: 'center',
         borderRadius: 10,
-        height: VERTICAL_CELL_HEIGHT, 
+        height: VERTICAL_CELL_HEIGHT,
       }}>
       <View style={StyleSheet.absoluteFillObject}>
         {item.articles.map((article, index) => {
@@ -110,7 +110,7 @@ const HorizontalArticleList = ({item}) => {
         CellRendererComponent={({ children, index, style, ...props }) => {
           const cellStyle = [
             style,
-            { 
+            {
               zIndex: item.articles.length - index,
               elevation: item.articles.length - index,
               //justifyContent: 'center',
