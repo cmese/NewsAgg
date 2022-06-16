@@ -8,13 +8,16 @@ const EMPTY_ITEM_SIZE = width*.2;
 const ITEM_WIDTH = width * 0.8;
 const VERTICAL_CELL_HEIGHT = height * 0.8;
 const VISIBLE_ITEMS = 3;
-const NewsFeed = ({data, category}) => {
-  console.log("[NEWSFEED] : ", data);
-  console.log("[NEWSFEED END]");
+
+const NewsFeed = ({data}) => {
   const scrollYAnimated = React.useRef(new Animated.Value(0)).current;
   return (
     <View>
-      <AnimatedHeader scrollY={scrollYAnimated} data={data} verticalScrollDistance={VERTICAL_CELL_HEIGHT}/>
+      <AnimatedHeader
+        scrollY={scrollYAnimated}
+        data={data}
+        verticalScrollDistance={VERTICAL_CELL_HEIGHT}
+      />
       <Animated.FlatList
         data={data}
         keyExtractor={(_, index) => String(index)}
@@ -22,8 +25,8 @@ const NewsFeed = ({data, category}) => {
         snapToInterval={VERTICAL_CELL_HEIGHT}
         snapToAlignment={'start'}
         decelerationRate={'fast'}
-        contentContainerStyle={{ 
-          paddingBottom: 70, 
+        contentContainerStyle={{
+          paddingBottom: 70,
         }}
         onScroll={Animated.event(
           [{ nativeEvent: { contentOffset: { y: scrollYAnimated } } }],

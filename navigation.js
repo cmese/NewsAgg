@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { View, Text } from 'react-native';
+import { View, Text, StyleSheet } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import {
   createDrawerNavigator,
@@ -11,10 +11,35 @@ import {
 import Animated from 'react-native-reanimated';
 import { DrawerData } from './data/DrawerData';
 import FeedScreen from './screens/FeedScreen';
+import dataHook from './data/dataHook'
 
-const Feed = ({ route }) => {
+const Loading = () => (
+  <View style={styles.loadingContainer}>
+    <Text style={styles.paragraph}>Loading...</Text>
+  </View>
+);
+
+function filterByCat(cat) {
+  console.log("cat: ", cat)
+  return (item) => (item.categories.includes(cat))
+}
+
+//datahook should go just outside of here so it doesnt keep getting called
+const FeedCategoryFilter = ({ route }) => {
+  const data = dataHook();
+  if (data.length === 0) {
+    return <Loading />;
+  }
+  const { category } = route.params;
+
+  console.log("Category: ", JSON.stringify(category))
+  const filteredData = (category === "Home") ? data : data.filter((item) => item.categories.includes(category))
+  //const filteredData = (category === JSON.stringify("Home")) ? data : data.filter( trend => {
+  //    const filteredArticles = trend.articles.filter(filterByCat(category))
+  //    return filteredArticles.length > 0;
+  //  });
   return (
-      <FeedScreen category={route.params?.name}/>
+    <FeedScreen data={filteredData}/>
   );
 }
 
@@ -56,6 +81,7 @@ const NavDrawer = () => {
             <Drawer.Screen
               key={drawerItem.name}
               name={drawerItem.name}
+              initialParams={{ category: drawerItem.name }}
               options={{
                 drawerIcon: ({focused}) => {
                   var IconTypeTag = drawerItem.iconType;
@@ -68,22 +94,7 @@ const NavDrawer = () => {
                   )
                 }
               }}
-              component={Feed}
-            /*
-                drawerItem.iconType==='WHATEVER' ?
-                  <WhateverIcons
-                    name={drawerItem.iconName}
-                    size={20}
-                    color={focused ? "#0000c1" : "black"}
-                  />
-                :
-                drawerItem.iconType==='OTHER' ?
-                  <OtherIcons
-                    name={drawerItem.iconName}
-                    size{20}
-                    color={focused ? "#0000c1" : "black"}
-                  />
-                  */
+              component={FeedCategoryFilter}
             />
           )
         }
@@ -93,65 +104,18 @@ const NavDrawer = () => {
   );
 }
 
+const styles = StyleSheet.create({
+  loadingContainer: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  paragraph: {
+    margin: 24,
+    fontSize: 18,
+    fontWeight: 'bold',
+    textAlign: 'center',
+  }
+});
+
 export default NavDrawer
-
-
-
-//import React from 'react';
-//import { createStackNavigator } from '@react-navigation/stack';
-//import { createBottomTabNavigator, useBottomTabBarHeight } from '@react-navigation/bottom-tabs';
-//import { NavigationContainer } from '@react-navigation/native';
-//import HomeScreen from './screens/HomeScreen';
-//import SportsScreen from './screens/SportsScreen';
-//import TechScreen from './screens/TechScreen';
-//import PoliticsScreen from './screens/PoliticsScreen';
-//import BusinessScreen from './screens/BusinessScreen';
-
-//import { bottomTabIcons } from './data/BottomTabIcons';
-//import { Ionicons } from '@expo/vector-icons';
-//const Stack = createStackNavigator();
-
-//export const BottomTabBarHeight = useBottomTabBarHeight();
-//const TabNav = createBottomTabNavigator();
-/*
-const screenOptions = {
-  headerShown: false,
-}*/
-
-/*
-const NavStack = ({data}) => (
-  <NavigationContainer>
-    <TabNav.Navigator
-      initialRouteName='Trending'
-      screenOptions={({ route }) => ({
-        tabBarIcon: ({ focused, color, size }) => {
-          let iconName;
-          let iconIndex = bottomTabIcons.findIndex(tabIcon => tabIcon.name === route.name);
-
-          if (iconIndex >= 0) {
-            iconName = focused ? bottomTabIcons[iconIndex].active
-              : bottomTabIcons[iconIndex].inactive;
-            color = focused ? 'black' : 'grey';
-          } else {
-            console.log("error: bottomTabs");
-            return;
-          }
-
-          return <Ionicons name={iconName} size={size} color={color} />;
-        },
-        headerShown: false,
-        //tabBarActiveTintColor: 'tomato',
-        //tabBarInactiveTintColor: 'gray',
-      })}
-    >
-      <TabNav.Screen name='Tech' component={TechScreen} />
-      <TabNav.Screen name='Politics' component={PoliticsScreen} />
-      <TabNav.Screen name='Trending' component={() => <HomeScreen data={data} />} />
-      <TabNav.Screen name='Sports' component={SportsScreen} />
-      <TabNav.Screen name='Business' component={BusinessScreen} />
-    </TabNav.Navigator>
-  </NavigationContainer>
-)
-
-export default NavStack
-*/

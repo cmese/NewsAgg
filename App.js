@@ -4,11 +4,12 @@ import { StyleSheet, View, Text, Platform, StatusBar, Dimensions } from 'react-n
 import { SafeAreaView } from 'react-native-safe-area-context';
 import NavDrawer from './navigation'
 
+//ignores timer warnings from firebase:
+import { LogBox } from 'react-native';
+LogBox.ignoreLogs(['Setting a timer']);
 //const androidWindowHeight = Dimensions.get('window').height;
 //const deviceHeight = Dimensions.get('screen').height;
 
-
-//TODO: Move data fetch to a custom hook
 export default function App() {
   return (
     <SafeAreaView style={styles.AndroidSafeArea}>

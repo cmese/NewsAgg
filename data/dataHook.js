@@ -6,7 +6,7 @@ const getRecentTrends = async () => {
   const docRef = doc(db, "trendsAgg", "recentTrends");
   const docSnap = await getDoc(docRef);
   if (docSnap.exists()) {
-    console.log(docSnap.data());
+    //console.log(docSnap.data());
     return docSnap.data().last500;
   } else {
     console.log('[ERROR]: DocSnap doesnt exist');
