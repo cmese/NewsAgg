@@ -7,7 +7,7 @@ const { height, width } = Dimensions.get('window');
 const EMPTY_ITEM_SIZE = width*.2;
 const ITEM_WIDTH = width * 0.8;
 const VERTICAL_CELL_HEIGHT = height * 0.8;
-const VISIBLE_ITEMS = 3;
+const VISIBLE_ITEMS = 5;
 
 const NewsFeed = ({data}) => {
   const scrollYAnimated = React.useRef(new Animated.Value(0)).current;
@@ -82,7 +82,7 @@ const HorizontalArticleList = ({item}) => {
             style={[
               StyleSheet.absoluteFillObject,
               {
-                opacity
+                opacity,
               }
             ]}
             blurRadius={5}
@@ -93,6 +93,7 @@ const HorizontalArticleList = ({item}) => {
         data={[...item.articles, { key: 'empty-right' }]}
         keyExtractor={(_, index) => String(index)}
         horizontal
+        showsHorizontalScrollIndicator={false}
         //inverted
         snapToInterval={ITEM_WIDTH}
         snapToAlignment={'start'}
@@ -130,17 +131,18 @@ const HorizontalArticleList = ({item}) => {
             return <View style={{ width: EMPTY_ITEM_SIZE }} />;
           }
           const inputRange = [
-            (index - 1) * ITEM_WIDTH, 
-            index * ITEM_WIDTH, 
-            (index + 1) * ITEM_WIDTH,
+            (index - 1) * ITEM_WIDTH, //item behind (right)
+            index * ITEM_WIDTH, //current item
+            (index + 1) * ITEM_WIDTH, //item front (left)
           ];
           const translateY = scrollX.interpolate({
             inputRange,
-            outputRange: [-60, 0, 100],
+            outputRange: [-25, 0, 25],
           });
           const translateX = scrollX.interpolate({
             inputRange,
-            outputRange: [-ITEM_WIDTH*.8, 0, ITEM_WIDTH*.8],
+            //outputRange: [-50, 0, 10]
+            outputRange: [-ITEM_WIDTH*.9, 0, ITEM_WIDTH*.5],
           });
           const opacity = scrollX.interpolate({
             inputRange,
@@ -148,15 +150,15 @@ const HorizontalArticleList = ({item}) => {
           });
           const scale = scrollX.interpolate({
             inputRange,
-            outputRange: [0.8, 1, 1.3],
+            outputRange: [.95, 1, 1.5],
             //extrapolate: 'clamp'
           });
           return (
-            <ArticleCard 
+            <ArticleCard
               item={item}
               itemWidth={ITEM_WIDTH}
               itemHeight={VERTICAL_CELL_HEIGHT*0.8}
-              translateY={translateY} 
+              translateY={translateY}
               translateX={translateX}
               opacity={opacity}
               scale={scale}
@@ -165,7 +167,7 @@ const HorizontalArticleList = ({item}) => {
         }}
       />
       <View style={{
-        bottom: 10,
+        //bottom: 10,
         //backgroundColor: 'red',
         minHeight: VERTICAL_CELL_HEIGHT*0.10,
         marginRight: -(width/2 - width/7/2),

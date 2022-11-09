@@ -12,6 +12,7 @@ import Animated from 'react-native-reanimated';
 import { DrawerData } from './data/DrawerData';
 import FeedScreen from './screens/FeedScreen';
 import dataHook from './data/dataHook'
+import { Entypo } from '@expo/vector-icons';
 
 const Loading = () => (
   <View style={styles.loadingContainer}>
@@ -19,12 +20,6 @@ const Loading = () => (
   </View>
 );
 
-function filterByCat(cat) {
-  console.log("cat: ", cat)
-  return (item) => (item.categories.includes(cat))
-}
-
-//datahook should go just outside of here so it doesnt keep getting called
 const FeedCategoryFilter = ({ route }) => {
   const data = dataHook();
   if (data.length === 0) {
@@ -32,12 +27,16 @@ const FeedCategoryFilter = ({ route }) => {
   }
   const { category } = route.params;
 
-  console.log("Category: ", JSON.stringify(category))
+  //filter by trend categories
   const filteredData = (category === "Home") ? data : data.filter((item) => item.categories.includes(category))
-  //const filteredData = (category === JSON.stringify("Home")) ? data : data.filter( trend => {
-  //    const filteredArticles = trend.articles.filter(filterByCat(category))
-  //    return filteredArticles.length > 0;
-  //  });
+
+  //filter by article categories - same result as above
+  /*const filteredData = (category === "Home") ? data :
+    data.filter( trend => {
+      const filteredArticles = trend.articles.filter((item) => item.categories.includes(category))
+      return filteredArticles.length > 0;
+    });
+  */
   return (
     <FeedScreen data={filteredData}/>
   );
@@ -83,12 +82,28 @@ const NavDrawer = () => {
               name={drawerItem.name}
               initialParams={{ category: drawerItem.name }}
               options={{
+                headerStyle: {
+                  borderRadius: 300,
+                  height: 45,
+                },
+                headerTitleAlign: 'center',
+                headerRight: () => (
+                  <Entypo
+                    name={"dots-three-vertical"}
+                    size={20}
+                    color={"black"}
+                    onPress={() => alert('Settings')}
+                    style={{
+                      marginRight: 20,
+                    }}
+                  />
+                ),
                 drawerIcon: ({focused}) => {
                   var IconTypeTag = drawerItem.iconType;
                   return (
                     <IconTypeTag
                       name={drawerItem.iconName}
-                      size={20}
+                      size={26}
                       color={focused ? "#0000c1" : "black"}
                     />
                   )

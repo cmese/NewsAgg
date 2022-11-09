@@ -12,12 +12,13 @@ const ArticleCard = ({item, itemWidth, itemHeight, translateY, translateX, opaci
   return (
     <Animated.View
       style={{
-        minHeight: itemHeight,
+        maxHeight: itemHeight,
         width: itemWidth,
-        //backgroundColor: 'white',
-        borderRadius: 16,
         overflow: 'hidden',
-        //shadowColor: 'black',
+        backgroundColor: 'white',
+        borderRadius: 16,
+        borderColor: shadowColor[item.publisher],
+        borderWidth: 1,
         shadowColor: shadowColor[item.publisher],
         shadowOpacity: .1,
         shadowOffset: {
@@ -26,48 +27,38 @@ const ArticleCard = ({item, itemWidth, itemHeight, translateY, translateX, opaci
         },
         shadowRadius: 4,
         elevation: 15,
-        transform: [{ translateX }, { scale } ],
+        transform: [{ translateX }, { translateY }, { scale } ],
         opacity,
         left: (width-itemWidth)/2,
 
       }}
     >
+      <Image
+        source={{ uri: item.imageURL }}
+        //style={styles.articleImg}
+        style={{ width: itemWidth, height: 429*(itemWidth/762)-1, resizeMode: 'contain', }}
+      />
       <View
-        style={{
-          position: 'absolute',
-          height: itemHeight,
-        }}
+        style={styles.textContainer}
       >
-        <Image
-          source={{ uri: item.imageURL }}
-          style={styles.articleImg}
-          //style={{ width: '100%', height: '60%', resizeMode: 'cover', }}
-        />
-        <View 
-          style={styles.textContainer}
-          //style={{flexBasis: '60%'}}
+        <Text
+          numberOfLines={3}
+          style={styles.articleTitleText}
         >
-          <Text
-            adjustsFontSizeToFit
-            numberOfLines={2}
-            //style={{flexBasis: 30}}
-            style={styles.articleTitleText}
-          >
-            {item.title}
-          </Text>
-          <Text 
-            adjustsFontSizeToFit
-            style={styles.articleDateText}>
-            {item.date}
-          </Text>
-          <Text
-            //numberOfLines={4}
-            adjustsFontSizeToFit
-            style={styles.articleDescriptionText}
-          >
-            {item.description}
-          </Text>
-        </View>
+          {item.title}
+        </Text>
+        <Text
+          adjustsFontSizeToFit
+          style={styles.articleDateText}>
+          {item.date}
+        </Text>
+        <Text
+          //numberOfLines={4}
+          adjustsFontSizeToFit
+          style={styles.articleDescriptionText}
+        >
+          {item.description}
+        </Text>
       </View>
     </Animated.View>
   );
@@ -75,44 +66,30 @@ const ArticleCard = ({item, itemWidth, itemHeight, translateY, translateX, opaci
 
 const styles = StyleSheet.create({
   textContainer: {
-    flexBasis: '40%',
-    flexGrow: 1,
-  },
-  articleImg: {
-    width: '100%', 
-    resizeMode:'cover',
-    margin: 0,
-    flexGrow: 1,
-    flexShrink: 1,
-    flexBasis: '60%',
+    //flexGrow: 1,
+    paddingLeft: 10,
+    paddingRight: 10,
+    //margin: 10,
   },
   articleTitleText: {
     fontSize: 24,
     fontWeight: 'bold',
-    backgroundColor: 'green',
-    flexBasis: '30%',
-    textAlign: 'center',
-    flexShrink: 1,
-    flexGrow: 2,
+    backgroundColor: 'white',
+    textAlign: 'left',
   },
   articleDateText: {
     fontSize: 20,
     fontStyle: 'italic',
-    fontWeight: '800',
+    //fontWeight: '800',
     paddingTop: 5,
-    backgroundColor: 'yellow',
-    flexBasis: '15%',
-    flexShrink: 1,
-    flexGrow: 1,
+    color: 'grey',
+    textAlign: 'left'
   },
   articleDescriptionText: {
     fontSize: 16,
-    paddingTop: 5,
+    paddingTop: 10,
     paddingBottom: 10,
-    backgroundColor: 'orange',
-    flexBasis: '50%',
-    flexGrow: 2,
-    flexShrink: 1,
+    backgroundColor: 'white',
   },
 });
 

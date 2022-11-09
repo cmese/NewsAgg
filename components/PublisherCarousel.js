@@ -6,7 +6,6 @@ const SPACING = 10;
 const ITEM_SIZE = width/7;
 
 const PublisherCarousel = ({articles, scrollX, scrollWidth}) => {
-  
   return (
     <Animated.FlatList
       data={articles}
@@ -34,7 +33,7 @@ const PublisherCarousel = ({articles, scrollX, scrollWidth}) => {
             index * -ITEM_SIZE,
             (index + 1) * -ITEM_SIZE,
             (index + 2) * -ITEM_SIZE,
-          ]  
+          ]
         });
         const scale = scrollX.interpolate({
           inputRange,

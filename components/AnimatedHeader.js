@@ -10,21 +10,21 @@ const AnimatedHeader = ({ scrollY, data, verticalScrollDistance }) => {
     outputRange: [0, -HEADER_HEIGHT],
   });
   return (
-    <View 
-      style={{ 
+    <View
+      style={{
         height: HEADER_HEIGHT,
         overflow: 'hidden',
       }}
     >
-      <Animated.View 
-        style={{ 
+      <Animated.View
+        style={{
           transform: [{ translateY }],
         }}
       >
         {data.map((item, index) => {
           return (
             <Animated.View key={index} style={styles.headerContainer}>
-              <Text 
+              <Text
                 style={[styles.headerText]}
                 adjustsFontSizeToFit
               >
@@ -43,12 +43,14 @@ const styles = StyleSheet.create({
     height: HEADER_HEIGHT,
     justifyContent: 'center',
     paddingLeft: TEXT_SPACING,
+    backgroundColor: 'black',
   },
   headerText: {
     fontSize: 40,
     fontWeight: '900',
     textTransform: 'uppercase',
     letterSpacing: -1,
+    color: 'white',
   },
 });
 
