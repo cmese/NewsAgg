@@ -2,7 +2,19 @@ import React, { useState, useEffect } from 'react';
 import { Animated } from 'react-native';
 //import { shorthash } from 'shorthash';
 const hash = require('hash-string')
+//const sharp = require('sharp');
 import * as FileSystem from 'expo-file-system';
+
+/*
+async function resizeImage(path) {
+  try {
+    await sharp(path)
+      .toFormat("jpeg", { mozjpeg: true })
+      .toFile(path);
+  } catch (error) {
+    console.log(error);
+  }
+}*/
 
 const CachedImage = (props) => {
   const { url, style, blurRadius } = props;
@@ -17,6 +29,7 @@ const CachedImage = (props) => {
       //hash the url
       //const name = shorthash.unique(url);
       const name = hash(url)
+      //console.log(name)
 
       //create path using filesystem directory and shothashed url
       const path = `${FileSystem.cacheDirectory}${name}`;
@@ -31,6 +44,7 @@ const CachedImage = (props) => {
       }
       //if image does not exist locally, download it and cache it
       const newImage = await FileSystem.downloadAsync(url, path);
+      //resizeImage(path);
       setUri(newImage.uri);
     } catch(err) {
       console.log("error", err)

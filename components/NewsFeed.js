@@ -30,6 +30,7 @@ const NewsFeed = ({data}) => {
         keyExtractor={(_, index) => String(index)}
         showsVerticalScrollIndicator={false}
         snapToInterval={VERTICAL_CELL_HEIGHT}
+        maxToRenderPerBatch={3}
         initialNumToRender={3}
         snapToAlignment={'start'}
         decelerationRate={'fast'}
@@ -46,16 +47,13 @@ const NewsFeed = ({data}) => {
             useNativeDriver: true
           }
         )}
-        renderItem={({item}) => {
-          return (
-            <HorizontalArticleList item={item}/>
-          );
-        }}
+        renderItem={renderHorizontalListItem}
       />
     </View>
   )
 }
 
+const renderHorizontalListItem = ({ item }) => <HorizontalArticleList item={item} />
 
 const HorizontalArticleList = ({item}) => {
   const scrollX = React.useRef(new Animated.Value(0)).current;
@@ -76,14 +74,27 @@ const HorizontalArticleList = ({item}) => {
       <View style={StyleSheet.absoluteFillObject}>
         {item.articles.map((article, index) => {
           const inputRange = [
-            (index - 1) * width,
-            index * width,
-            (index + 1) * width
+            (index - 1) * ITEM_WIDTH,
+            index * ITEM_WIDTH,
+            (index + 1) * ITEM_WIDTH
           ]
           const opacity = scrollX.interpolate({
             inputRange,
             outputRange: [0, 1, 0]
           })
+          if (item.key === 'empty-right') {
+            return <Image
+              key={item.key}
+              url={ '' }
+              style={[
+                StyleSheet.absoluteFillObject,
+                {
+                  opacity,
+                }
+              ]}
+              blurRadius={5}
+            />
+          }
           return <CachedImage
             key={`image-feed-${index}`}
             url={ article.imageURL}
@@ -102,6 +113,7 @@ const HorizontalArticleList = ({item}) => {
         keyExtractor={(_, index) => String(index)}
         horizontal
         showsHorizontalScrollIndicator={false}
+        maxToRenderPerBatch={3}
         snapToInterval={ITEM_WIDTH}
         snapToAlignment={'start'}
         style={{
@@ -179,4 +191,9 @@ const HorizontalArticleList = ({item}) => {
   );
 }
 
-export default NewsFeed
+function areEqual(preProps, nextProps) {
+  return true;
+}
+
+export default React.memo(NewsFeed, areEqual)
+

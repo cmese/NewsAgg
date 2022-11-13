@@ -72,6 +72,10 @@ const ArticleCard = ({item, index, itemHeight, translateY, translateX, opacity, 
   );
 }
 
+function areEqual(preProps, nextProps) {
+  return true;
+}
+
 const styles = StyleSheet.create({
   textContainer: {
     //flexGrow: 1,
@@ -101,4 +105,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ArticleCard
+export default React.memo(ArticleCard, areEqual)
