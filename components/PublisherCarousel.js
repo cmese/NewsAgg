@@ -4,6 +4,7 @@ import { StyleSheet, Text, View, Image, FlatList, Animated, Dimensions } from 'r
 const { width } = Dimensions.get('window');
 const SPACING = 10;
 const ITEM_SIZE = width/7;
+const HORZ_PADDING = width/2 - width/7/2;
 
 const PublisherCarousel = ({articles, scrollX, scrollWidth}) => {
   return (
@@ -14,7 +15,7 @@ const PublisherCarousel = ({articles, scrollX, scrollWidth}) => {
       contentContainerStyle={{
         alignItems: 'center',
         //backgroundColor: 'pink',
-        paddingHorizontal: width/2 - width/7/2,
+        paddingHorizontal: HORZ_PADDING,
       }}
       scrollEnabled={false}
       renderItem={({item, index}) => {
@@ -41,23 +42,19 @@ const PublisherCarousel = ({articles, scrollX, scrollWidth}) => {
           extrapolate: "clamp",
         });
         return (
-          //<View style={styles.container}>
-          <Animated.View 
+          <Animated.View
             style={{
               width: ITEM_SIZE,
-              //backgroundColor: 'white',
               borderRadius: 23,
               borderColor: 'black',
-              //borderWidth: 2,
               overflow: 'visible',
-              //marginHorizontal: SPACING
               transform: [
                 { translateX },
                 { scale }
               ],
             }}
           >
-            <View 
+            <View
               style={{
               marginHorizontal: SPACING,
               backgroundColor: 'yellow',
@@ -68,7 +65,7 @@ const PublisherCarousel = ({articles, scrollX, scrollWidth}) => {
               }}
             >
               <Text styles={styles.publisherName}>{item.publisher}</Text>
-            </View>  
+            </View>
           </Animated.View>
         );
       }}

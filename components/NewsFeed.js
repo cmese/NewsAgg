@@ -1,13 +1,20 @@
 import React from 'react';
-import { Image, StyleSheet, Text, View, Dimensions, FlatList, Animated } from 'react-native';
+import { StyleSheet, View, Dimensions, Animated } from 'react-native';
 import ArticleCard from './ArticleCard';
+import CachedImage from './CachedImage';
 import AnimatedHeader from './AnimatedHeader';
 import PublisherCarousel from './PublisherCarousel';
 const { height, width } = Dimensions.get('window');
 const EMPTY_ITEM_SIZE = width*.2;
 const ITEM_WIDTH = width * 0.8;
 const VERTICAL_CELL_HEIGHT = height * 0.8;
-const VISIBLE_ITEMS = 5;
+const ARTICLE_CARD_HEIGHT = VERTICAL_CELL_HEIGHT * 0.8;
+const VISIBLE_ITEMS = 3;
+const NEG_OUTPUT_RANGE = -ITEM_WIDTH*.9;
+const POS_OUTPUT_RANGE = ITEM_WIDTH*.5;
+const OPACITY_OUTPUT_RANGE = 1-1/VISIBLE_ITEMS;
+const MIN_CELL_HEIGHT = VERTICAL_CELL_HEIGHT*.10;
+const CELL_MARGIN_RIGHT = -(width/2 - width/7/2);
 
 const NewsFeed = ({data}) => {
   const scrollYAnimated = React.useRef(new Animated.Value(0)).current;
@@ -23,6 +30,7 @@ const NewsFeed = ({data}) => {
         keyExtractor={(_, index) => String(index)}
         showsVerticalScrollIndicator={false}
         snapToInterval={VERTICAL_CELL_HEIGHT}
+        initialNumToRender={3}
         snapToAlignment={'start'}
         decelerationRate={'fast'}
         contentContainerStyle={{
@@ -68,7 +76,7 @@ const HorizontalArticleList = ({item}) => {
       <View style={StyleSheet.absoluteFillObject}>
         {item.articles.map((article, index) => {
           const inputRange = [
-            (index -1) * width,
+            (index - 1) * width,
             index * width,
             (index + 1) * width
           ]
@@ -76,9 +84,9 @@ const HorizontalArticleList = ({item}) => {
             inputRange,
             outputRange: [0, 1, 0]
           })
-          return <Animated.Image
-            key={`image-${index}`}
-            source={{uri: article.imageURL}}
+          return <CachedImage
+            key={`image-feed-${index}`}
+            url={ article.imageURL}
             style={[
               StyleSheet.absoluteFillObject,
               {
@@ -94,17 +102,13 @@ const HorizontalArticleList = ({item}) => {
         keyExtractor={(_, index) => String(index)}
         horizontal
         showsHorizontalScrollIndicator={false}
-        //inverted
         snapToInterval={ITEM_WIDTH}
         snapToAlignment={'start'}
         style={{
           flexBasis: '50%',
-          //backgroundColor: 'red',
         }}
         removeClippedSubviews={false}
         contentContainerStyle={{
-          //flex: 1,
-          //justifyContent: 'center',
           alignItems: 'center',
         }}
         onScroll={Animated.event(
@@ -117,7 +121,6 @@ const HorizontalArticleList = ({item}) => {
             {
               zIndex: item.articles.length - index,
               elevation: item.articles.length - index,
-              //justifyContent: 'center',
             },
           ];
           return (
@@ -142,11 +145,11 @@ const HorizontalArticleList = ({item}) => {
           const translateX = scrollX.interpolate({
             inputRange,
             //outputRange: [-50, 0, 10]
-            outputRange: [-ITEM_WIDTH*.9, 0, ITEM_WIDTH*.5],
+            outputRange: [NEG_OUTPUT_RANGE, 0, POS_OUTPUT_RANGE],
           });
           const opacity = scrollX.interpolate({
             inputRange,
-            outputRange: [1 - 1 / VISIBLE_ITEMS, 1, 0],
+            outputRange: [OPACITY_OUTPUT_RANGE, 1, 0],
           });
           const scale = scrollX.interpolate({
             inputRange,
@@ -156,8 +159,8 @@ const HorizontalArticleList = ({item}) => {
           return (
             <ArticleCard
               item={item}
-              itemWidth={ITEM_WIDTH}
-              itemHeight={VERTICAL_CELL_HEIGHT*0.8}
+              index={index}
+              itemHeight={ARTICLE_CARD_HEIGHT}
               translateY={translateY}
               translateX={translateX}
               opacity={opacity}
@@ -167,10 +170,8 @@ const HorizontalArticleList = ({item}) => {
         }}
       />
       <View style={{
-        //bottom: 10,
-        //backgroundColor: 'red',
-        minHeight: VERTICAL_CELL_HEIGHT*0.10,
-        marginRight: -(width/2 - width/7/2),
+        minHeight: MIN_CELL_HEIGHT,
+        marginRight: CELL_MARGIN_RIGHT,
       }}>
         <PublisherCarousel articles={item.articles} scrollX={scrollX} scrollWidth={ITEM_WIDTH}/>
       </View>

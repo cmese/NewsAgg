@@ -1,19 +1,22 @@
-import React from 'react';
-import { View, Text, Image, Dimensions, Animated, StyleSheet } from 'react-native';
-
+import React, { memo } from 'react';
+import { View, Text, Dimensions, Animated, StyleSheet } from 'react-native';
+import CachedImage from './CachedImage';
 const TEXT_SPACING = 5;
 const { height, width } = Dimensions.get('window');
-
+const ITEM_WIDTH = width * 0.8;
+const IMAGE_HEIGHT = 429*(ITEM_WIDTH/762)-1;
+const CARD_LEFT = ITEM_WIDTH/8;
 const shadowColor = {
   "cnn" : 'red',
   "fox" : 'blue',
 };
-const ArticleCard = ({item, itemWidth, itemHeight, translateY, translateX, opacity, scale}) => {
+
+const ArticleCard = ({item, index, itemHeight, translateY, translateX, opacity, scale}) => {
   return (
     <Animated.View
       style={{
         maxHeight: itemHeight,
-        width: itemWidth,
+        width: ITEM_WIDTH,
         overflow: 'hidden',
         backgroundColor: 'white',
         borderRadius: 16,
@@ -29,14 +32,19 @@ const ArticleCard = ({item, itemWidth, itemHeight, translateY, translateX, opaci
         elevation: 15,
         transform: [{ translateX }, { translateY }, { scale } ],
         opacity,
-        left: (width-itemWidth)/2,
+        left: CARD_LEFT,
 
       }}
     >
-      <Image
-        source={{ uri: item.imageURL }}
-        //style={styles.articleImg}
-        style={{ width: itemWidth, height: 429*(itemWidth/762)-1, resizeMode: 'contain', }}
+      <CachedImage
+        key={`image-card-${index}`}
+        style={{
+          width: ITEM_WIDTH,
+          height: IMAGE_HEIGHT,
+          resizeMode: 'contain',
+        }}
+        url={item.imageURL}
+        blurRadius={0}
       />
       <View
         style={styles.textContainer}

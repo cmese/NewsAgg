@@ -26,7 +26,8 @@ function dataHook() {
     const fetchData = async () => {
       const data = await getRecentTrends();
       setData(data);
-    }; // might want to add empty items in each of data's article arrays to create fake space
+    };
+    // might want to add empty items in each of data's article arrays to create fake space
 
     if (data.length === 0) {
       fetchData(data);
