@@ -27,10 +27,10 @@ const NewsFeed = ({data}) => {
       />
       <Animated.FlatList
         data={data}
-        keyExtractor={(_, index) => String(index)}
+        keyExtractor={(item, index) => `${item.name}${index}`}
         showsVerticalScrollIndicator={false}
         snapToInterval={VERTICAL_CELL_HEIGHT}
-        maxToRenderPerBatch={3}
+        //maxToRenderPerBatch={3}
         initialNumToRender={3}
         snapToAlignment={'start'}
         decelerationRate={'fast'}
@@ -65,55 +65,61 @@ const HorizontalArticleList = ({item}) => {
         //console.log("view height: ", event.nativeEvent.layout.height);
       }}
       style={{
-        //backgroundColor: backgroundPubColor,
         flexGrow: 1,
-        //alignContent: 'center',
         borderRadius: 10,
         height: VERTICAL_CELL_HEIGHT,
       }}>
-      <View style={StyleSheet.absoluteFillObject}>
-        {item.articles.map((article, index) => {
-          const inputRange = [
-            (index - 1) * ITEM_WIDTH,
-            index * ITEM_WIDTH,
-            (index + 1) * ITEM_WIDTH
-          ]
-          const opacity = scrollX.interpolate({
-            inputRange,
-            outputRange: [0, 1, 0]
-          })
-          if (item.key === 'empty-right') {
-            return <Image
-              key={item.key}
-              url={ '' }
+      <Animated.View
+          style={[
+            StyleSheet.absoluteFillObject,
+            {
+              width: width*10,
+            }
+          ]}
+        >
+        <Animated.FlatList
+          data={item.articles}
+          keyExtractor={(_, index) => `${item.name}${item.date}${index}`}
+          horizontal
+          scrollEnabled={false}
+          renderItem={({ item, index }) => {
+        //{item.articles.map((article, index) => {
+            const inputRange = [
+              (index - 1) * ITEM_WIDTH,
+              index * ITEM_WIDTH,
+              (index + 1) * ITEM_WIDTH
+            ];
+            const opacity = scrollX.interpolate({
+              inputRange,
+              outputRange: [0, 1, 0]
+            })
+            const translateX = scrollX.interpolate({
+              inputRange,
+              //outputRange: [-50, 0, 10]
+              outputRange: [width, 0, -width],
+            })
+            return <CachedImage
+              key={`image-feed-${index}`}
+              url={ item.imageURL}
               style={[
-                StyleSheet.absoluteFillObject,
+                //StyleSheet.absoluteFillObject,
                 {
-                  opacity,
+                  translateX,
+                  //opacity,
+                  width: width/2,
                 }
               ]}
               blurRadius={5}
             />
-          }
-          return <CachedImage
-            key={`image-feed-${index}`}
-            url={ article.imageURL}
-            style={[
-              StyleSheet.absoluteFillObject,
-              {
-                opacity,
-              }
-            ]}
-            blurRadius={5}
-          />
-        })}
-      </View>
+          }}
+        />
+      </Animated.View>
       <Animated.FlatList
         data={[...item.articles, { key: 'empty-right' }]}
-        keyExtractor={(_, index) => String(index)}
+        keyExtractor={(_, index) => `${item.name}${index}`}
         horizontal
         showsHorizontalScrollIndicator={false}
-        maxToRenderPerBatch={3}
+        //maxToRenderPerBatch={3}
         snapToInterval={ITEM_WIDTH}
         snapToAlignment={'start'}
         style={{

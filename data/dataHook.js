@@ -4,7 +4,7 @@ import { getDoc, doc } from 'firebase/firestore'
 
 const getRecentTrends = async () => {
   const docRef = doc(db, "trendsAgg", "recentTrends");
-  const docSnap = await getDoc(docRef);
+  const docSnap = await getDoc(docRef); //TODO: change this to try catch
   if (docSnap.exists()) {
     //console.log(docSnap.data());
     return docSnap.data().last500;

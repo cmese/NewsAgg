@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { Animated } from 'react-native';
+import React, { useState, useEffect, useRef } from 'react';
+import { Animated, Text } from 'react-native';
 //import { shorthash } from 'shorthash';
 const hash = require('hash-string')
 //const sharp = require('sharp');
@@ -39,7 +39,7 @@ const CachedImage = (props) => {
 
       //if image exists locally, display it without loading externally
       if (image.exists) {
-        setUri(image.uri);
+        //setUri(image.uri);
         return;
       }
       //if image does not exist locally, download it and cache it
@@ -50,7 +50,7 @@ const CachedImage = (props) => {
       console.log("error", err)
     }
   };
-  return <Animated.Image style={style} source={{ uri: uri }} blurRadius={blurRadius} />;
+  return <Animated.Image style={style} source={{ uri: uri }} blurRadius={blurRadius} />
 };
 
 export default CachedImage;
