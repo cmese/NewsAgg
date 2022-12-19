@@ -89,6 +89,11 @@ const HorizontalArticleList = ({item}) => {
               index * ITEM_WIDTH,
               (index + 1) * ITEM_WIDTH
             ];
+            const inputRangeBackground = [
+              (index - 1) * ITEM_WIDTH,
+              index * ITEM_WIDTH,
+              (index + 1) * ITEM_WIDTH
+            ];
             const opacity = scrollX.interpolate({
               inputRange,
               outputRange: [0, 1, 0]
@@ -98,15 +103,20 @@ const HorizontalArticleList = ({item}) => {
               //outputRange: [-50, 0, 10]
               outputRange: [width, 0, -width],
             })
+            const translateXBackground = scrollX.interpolate({
+              inputRangeBackground,
+              //outputRange: [-50, 0, 10]
+              outputRange: [width, 0, -width],
+            })
+
             return <CachedImage
               key={`image-feed-${index}`}
               url={ item.imageURL}
               style={[
-                //StyleSheet.absoluteFillObject,
                 {
-                  translateX,
+                  translateXBackground,
                   //opacity,
-                  width: width/2,
+                  width: width,
                 }
               ]}
               blurRadius={5}
@@ -197,9 +207,5 @@ const HorizontalArticleList = ({item}) => {
   );
 }
 
-function areEqual(preProps, nextProps) {
-  return true;
-}
-
-export default React.memo(NewsFeed, areEqual)
+export default NewsFeed
 

@@ -20,10 +20,6 @@ const CachedImage = (props) => {
   const { url, style, blurRadius } = props;
   const [uri, setUri] = useState(url);
 
-  useEffect(() => {
-    Cached();
-  }, []);
-
   const Cached = async () => {
     try {
       //hash the url
@@ -50,6 +46,11 @@ const CachedImage = (props) => {
       console.log("error", err)
     }
   };
+
+  useEffect(() => {
+    Cached();
+  }, []);
+
   return <Animated.Image style={style} source={{ uri: uri }} blurRadius={blurRadius} />
 };
 
