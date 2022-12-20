@@ -20,24 +20,27 @@ const Loading = () => {
   </View>
 }*/
 
-function dataHook() {
+function useGetDataHook() {
   const [data, setData] = React.useState([]);
+
   React.useEffect(() => {
     const fetchData = async () => {
-      const data = await getRecentTrends();
-      setData(data);
-    };
-    // might want to add empty items in each of data's article arrays to create fake space
-
-    if (data.length === 0) {
-      fetchData(data);
+      try {
+        let docRef = doc(db, "trendsAgg", "recentTrends")
+        let docSnap = await getDoc(docRef)
+        setData(docSnap.data().last500)
+      } catch (e) {
+        console.log(e)
+      }
     }
-  }, [data]);
+    fetchData()
+    // might want to add empty items in each of data's article arrays to create fake space
+  }, [])
 
   //if (data.length === 0) {
   //  return <Loading />;
   //}
   return data;
-};
+}
 
-export default dataHook;
+export default useGetDataHook;

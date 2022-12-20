@@ -1,21 +1,11 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, memo } from 'react';
 import { Animated, Text } from 'react-native';
 //import { shorthash } from 'shorthash';
 const hash = require('hash-string')
-//const sharp = require('sharp');
 import * as FileSystem from 'expo-file-system';
+import { Image } from 'react-native-compressor';
 
-/*
-async function resizeImage(path) {
-  try {
-    await sharp(path)
-      .toFormat("jpeg", { mozjpeg: true })
-      .toFile(path);
-  } catch (error) {
-    console.log(error);
-  }
-}*/
-
+//change this to callback 
 const CachedImage = (props) => {
   const { url, style, blurRadius } = props;
   const [uri, setUri] = useState(url);
@@ -35,12 +25,15 @@ const CachedImage = (props) => {
 
       //if image exists locally, display it without loading externally
       if (image.exists) {
-        //setUri(image.uri);
         return;
       }
-      //if image does not exist locally, download it and cache it
+      //if image does not exist locally, download it, cache it, compress it
       const newImage = await FileSystem.downloadAsync(url, path);
-      //resizeImage(path);
+      
+      const result = await Image.compress(path, {
+        compressionMethod: 'auto',
+      });
+
       setUri(newImage.uri);
     } catch(err) {
       console.log("error", err)
@@ -50,8 +43,8 @@ const CachedImage = (props) => {
   useEffect(() => {
     Cached();
   }, []);
-
+  //console.log(uri)
   return <Animated.Image style={style} source={{ uri: uri }} blurRadius={blurRadius} />
 };
 
-export default CachedImage;
+export default memo(CachedImage)

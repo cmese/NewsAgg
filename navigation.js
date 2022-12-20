@@ -11,7 +11,7 @@ import {
 import Animated from 'react-native-reanimated';
 import { DrawerData } from './data/DrawerData';
 import FeedScreen from './screens/FeedScreen';
-import dataHook from './data/dataHook'
+import useGetDataHook from './data/dataHook'
 import { Entypo } from '@expo/vector-icons';
 
 const Loading = () => (
@@ -21,7 +21,7 @@ const Loading = () => (
 );
 
 const FeedCategoryFilter = ({ route }) => {
-  const data = dataHook();
+  const data = useGetDataHook();
   if (data.length === 0) {
     return <Loading />;
   }
