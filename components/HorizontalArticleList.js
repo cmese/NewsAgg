@@ -53,51 +53,24 @@ const HorizontalArticleList = ({item, keyExtractor}) => {
                 zIndex: item.articles.length - index,
                 elevation: item.articles.length - index,
               },
-            ];
+            ]
             return (
               <View style={cellStyle} index={index} {...props}>
                 {children}
               </View>
-            );
+            )
           }}
           renderItem={({ item, index }) => {
             if (item.key === 'empty-right') {
-              return <View style={{ width: EMPTY_ITEM_SIZE }} />;
+              return <View style={{ width: EMPTY_ITEM_SIZE }} />
             }
-            const inputRange = [
-              (index - 1) * ITEM_WIDTH, //item behind (right)
-              index * ITEM_WIDTH, //current item
-              (index + 1) * ITEM_WIDTH, //item front (left)
-            ];
-            const translateY = scrollX.interpolate({
-              inputRange,
-              outputRange: [-25, 0, 25],
-            });
-            const translateX = scrollX.interpolate({
-              inputRange,
-              //outputRange: [-50, 0, 10]
-              outputRange: [NEG_OUTPUT_RANGE, 0, POS_OUTPUT_RANGE],
-            });
-            const opacity = scrollX.interpolate({
-              inputRange,
-              outputRange: [OPACITY_OUTPUT_RANGE, 1, 0],
-            });
-            const scale = scrollX.interpolate({
-              inputRange,
-              outputRange: [.95, 1, 1.5],
-              //extrapolate: 'clamp'
-            });
             return (
               <ArticleCard
                 item={item}
                 index={index}
-                itemHeight={ARTICLE_CARD_HEIGHT}
-                translateY={translateY}
-                translateX={translateX}
-                opacity={opacity}
-                scale={scale}
+                scrollX={scrollX}
               />
-            );
+            )
           }}
         />
       <View style={{

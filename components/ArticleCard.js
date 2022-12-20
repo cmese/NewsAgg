@@ -6,16 +6,48 @@ const { height, width } = Dimensions.get('window');
 const ITEM_WIDTH = width * 0.8;
 const IMAGE_HEIGHT = 429*(ITEM_WIDTH/762)-1;
 const CARD_LEFT = ITEM_WIDTH/8;
+const VERTICAL_CELL_HEIGHT = height * 0.8;
+const ARTICLE_CARD_HEIGHT = VERTICAL_CELL_HEIGHT * 0.8;
+
+const VISIBLE_ITEMS = 3;
+const NEG_OUTPUT_RANGE = -ITEM_WIDTH*.9;
+const POS_OUTPUT_RANGE = ITEM_WIDTH*.5;
+const OPACITY_OUTPUT_RANGE = 1-1/VISIBLE_ITEMS;
+
 const shadowColor = {
   "cnn" : 'red',
   "fox" : 'blue',
 };
 
-const ArticleCard = ({item, index, itemHeight, translateY, translateX, opacity, scale}) => {
+const ArticleCard = ({item, index, scrollX}) => {
+  const inputRange = [
+    (index - 1) * ITEM_WIDTH, //item behind (right)
+    index * ITEM_WIDTH, //current item
+    (index + 1) * ITEM_WIDTH, //item front (left)
+  ];
+  const translateY = scrollX.interpolate({
+    inputRange,
+    outputRange: [-25, 0, 25],
+  });
+  const translateX = scrollX.interpolate({
+    inputRange,
+    //outputRange: [-50, 0, 10]
+    outputRange: [NEG_OUTPUT_RANGE, 0, POS_OUTPUT_RANGE],
+  });
+  const opacity = scrollX.interpolate({
+    inputRange,
+    outputRange: [OPACITY_OUTPUT_RANGE, 1, 0],
+  });
+  const scale = scrollX.interpolate({
+    inputRange,
+    outputRange: [.95, 1, 1.5],
+    //extrapolate: 'clamp'
+  });
+  console.log('Article Card Rendered')
   return (
     <Animated.View
       style={{
-        maxHeight: itemHeight,
+        maxHeight: ARTICLE_CARD_HEIGHT,
         width: ITEM_WIDTH,
         overflow: 'hidden',
         backgroundColor: 'white',
@@ -101,4 +133,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default ArticleCard
+export default memo(ArticleCard)
