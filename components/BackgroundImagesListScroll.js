@@ -1,3 +1,4 @@
+import { memo } from 'react'
 import { Dimensions, StyleSheet } from 'react-native'
 import CachedImage from './CachedImage'
 const { width } = Dimensions.get('window')
@@ -42,4 +43,4 @@ const BackgroundImagesListScroll = ({articles, scrollX}) => {
   )
 }
 
-export default BackgroundImagesListScroll
+export default memo(BackgroundImagesListScroll)
