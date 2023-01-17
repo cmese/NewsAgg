@@ -14,10 +14,11 @@ function useCompressedImage(url, setCachedDic) {
     useEffect(() => {
       async function fetchImage() {
         try {
+          //png = lossless, jpeg = loss but faster
           const compressedImage = await manipulateAsync(
               url,
               [ {resize: { width: ITEM_WIDTH } }],
-              { compress: 0.25, format: SaveFormat.JPEG }
+              { compress: 0.25, format: SaveFormat.PNG }
           )
           //Image.getSize(compressedImage.uri, (width, height) => {console.log(`width: ${width} height: ${height}`)})
           setImage(compressedImage)

@@ -4,10 +4,35 @@ import CachedImage from './CachedImage'
 const { height, width } = Dimensions.get('window')
 const ITEM_WIDTH = width * 0.8
 const CELL_HEIGHT = height * 0.8
-const _keyExtractor = (item, index) => `${item.title}${index}`;
 
+const _keyExtractor = (item, index) => `${item.title}${index}`
 
 const BackgroundImagesListScroll = ({articles, scrollX}) => {
+  const renderItem = ({ item, index }) => {
+    console.log(`${index}: ${item.title} BackgroundImage rendered.....`)
+    const translateX = scrollX.interpolate({
+      inputRange: [0, ITEM_WIDTH],
+      outputRange: [0, -width]
+    })
+    const opacity = scrollX.interpolate({
+      inputRange: [0, ITEM_WIDTH],
+      outputRange: [1, 0]
+    })
+    return (
+      <CachedImage
+      key={`image-feed-${index}`}
+      url={ item.imageURL}
+      name={item.title}
+      index={index}
+      style={{
+        translateX,
+        //opacity,
+        width: width,
+        height: CELL_HEIGHT,
+      }}
+      />
+    )
+  }
   return (
     <Animated.FlatList
       data={articles}
@@ -22,39 +47,7 @@ const BackgroundImagesListScroll = ({articles, scrollX}) => {
       }}
       scrollEnabled={false}
       removeClippedSubviews={false}
-      renderItem = {({ item, index }) => {
-        console.log(`${index}: ${item.title} BackgroundImage rendered.....`)
-        const translateX = scrollX.interpolate({
-          inputRange: [0, ITEM_WIDTH],
-          outputRange: [0, -width]
-        })
-        const opacity = scrollX.interpolate({
-          inputRange: [0, ITEM_WIDTH],
-          outputRange: [1, 0]
-        })
-        return (
-          <CachedImage
-          key={`image-feed-${index}`}
-          url={ item.imageURL}
-          name={item.title}
-          index={index}
-          style={[
-            //StyleSheet.absoluteFillObject,
-            {
-            translateX,
-            //opacity,
-            //tried these instead of absolutefillobject above
-            //width: width,
-            //height: CELL_HEIGHT,
-            width: width,
-            height: CELL_HEIGHT,
-            //borderWidth: 10,
-            //borderColor: 'black'
-            }
-          ]}
-          />
-        )
-      }}
+      renderItem = {renderItem}
     />
   )
 }

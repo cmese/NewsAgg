@@ -17,10 +17,20 @@ const CELL_MARGIN_RIGHT = -(width/2 - width/7/2);
 
 
 const HorizontalArticleList = ({item, keyExtractor}) => {
-  const scrollX = React.useRef(new Animated.Value(0)).current;
+  const scrollX = React.useRef(new Animated.Value(0)).current
+  const renderItem = ({ item, index }) => {
+    if (item.key === 'empty-right') {
+      return <View style={{ width: EMPTY_ITEM_SIZE }} />
+    }
+    return (
+      <ArticleCard
+        item={item}
+        index={index}
+        scrollX={scrollX}
+      />
+    )
+  }
   return (
-    //change this view to cell renderercomponent in flatlist
-    //MAJOR TODO: This view does not have width / height and backgroundimageslistscroll component has a stylesheet.absolutefillobject....
     <View
       style={{
         flex: 1,
@@ -62,18 +72,7 @@ const HorizontalArticleList = ({item, keyExtractor}) => {
               </View>
             )
           }}
-          renderItem={({ item, index }) => {
-            if (item.key === 'empty-right') {
-              return <View style={{ width: EMPTY_ITEM_SIZE }} />
-            }
-            return (
-              <ArticleCard
-                item={item}
-                index={index}
-                scrollX={scrollX}
-              />
-            )
-          }}
+          renderItem={renderItem}
         />
       <View style={{
         minHeight: MIN_CELL_HEIGHT,
