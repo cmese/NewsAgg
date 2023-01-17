@@ -20,16 +20,16 @@ const BackgroundImagesListScroll = ({articles, scrollX}) => {
     })
     return (
       <CachedImage
-      key={`image-feed-${index}`}
-      url={ item.imageURL}
-      name={item.title}
-      index={index}
-      style={{
-        translateX,
-        //opacity,
-        width: width,
-        height: CELL_HEIGHT,
-      }}
+        key={`image-feed-${index}`}
+        url={ item.imageURL}
+        name={item.title}
+        index={index}
+        style={{
+          translateX,
+          //opacity,
+          width: width,
+          height: CELL_HEIGHT,
+        }}
       />
     )
   }
@@ -45,6 +45,9 @@ const BackgroundImagesListScroll = ({articles, scrollX}) => {
         height: CELL_HEIGHT,
         width: width
       }}
+      getItemLayout={(data, index) => (
+        {length: width, offset: width * index, index}
+      )}
       scrollEnabled={false}
       removeClippedSubviews={false}
       renderItem = {renderItem}

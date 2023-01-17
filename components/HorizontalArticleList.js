@@ -58,6 +58,9 @@ const HorizontalArticleList = ({item, keyExtractor}) => {
             [{ nativeEvent: { contentOffset: { x: scrollX } } }],
             { useNativeDriver: true }
           )}
+          getItemLayout={(data, index) => (
+            {length: ITEM_WIDTH, offset: ITEM_WIDTH * index, index}
+          )}
           CellRendererComponent={({ children, index, style, ...props }) => {
             const cellStyle = [
               style,
