@@ -73,10 +73,12 @@ const ArticleCard = ({item, index, scrollX}) => {
         style={{
           width: ITEM_WIDTH,
           height: IMAGE_HEIGHT,
-          resizeMode: 'contain',
+          //resizeMode: 'cover',
         }}
         url={item.imageURL}
         blurRadius={0}
+        name={item.title}
+        index={index}
       />
       <View
         style={styles.textContainer}

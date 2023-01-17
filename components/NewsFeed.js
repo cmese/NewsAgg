@@ -12,14 +12,17 @@ const NewsFeed = ({data}) => {
   const scrollYAnimated = React.useRef(new Animated.Value(0)).current;
   console.log("*************NEWSFEED rendered****************")
   console.log(data.length)
+  
   return (
     <View>
       <AnimatedHeader
         scrollY={scrollYAnimated}
+        //data={data.slice(0,1)}
         data={data}
         verticalScrollDistance={VERTICAL_CELL_HEIGHT}
       />
       <Animated.FlatList
+        //data={data.slice(0,1)}
         data={data}
         keyExtractor={_keyExtractor}
         showsVerticalScrollIndicator={false}
@@ -30,6 +33,9 @@ const NewsFeed = ({data}) => {
         initialNumToRender={3}
         snapToAlignment={'start'}
         decelerationRate={'fast'}
+        getItemLayout={(data, index) => (
+          {length: VERTICAL_CELL_HEIGHT, offset: VERTICAL_CELL_HEIGHT * index, index}
+        )}
         contentContainerStyle={{
           paddingBottom: 70,
         }}

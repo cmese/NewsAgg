@@ -20,11 +20,13 @@ const HorizontalArticleList = ({item, keyExtractor}) => {
   const scrollX = React.useRef(new Animated.Value(0)).current;
   return (
     //change this view to cell renderercomponent in flatlist
+    //MAJOR TODO: This view does not have width / height and backgroundimageslistscroll component has a stylesheet.absolutefillobject....
     <View
       style={{
         flex: 1,
         borderRadius: 10,
         height: VERTICAL_CELL_HEIGHT,
+        width: width
       }}>
         <BackgroundImagesListScroll articles={item.articles} scrollX={scrollX}/>
         <Animated.FlatList
@@ -36,7 +38,7 @@ const HorizontalArticleList = ({item, keyExtractor}) => {
           snapToInterval={ITEM_WIDTH}
           snapToAlignment={'start'}
           style={{
-            flexBasis: '50%',
+            //flexBasis: '50%',
           }}
           removeClippedSubviews={false}
           contentContainerStyle={{

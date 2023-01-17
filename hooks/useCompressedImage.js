@@ -1,34 +1,41 @@
-import React, { useState, useEffect, useRef, memo } from 'react';
-import { View, Animated, Text } from 'react-native';
-//import { shorthash } from 'shorthash';
-//const hash = require('hash-string')
-//import * as FileSystem from 'expo-file-system';
-//import { manipulateAsync, SaveFormat } from 'expo-image-manipulator';
-import useCompressedImage from '../hooks/useCompressedImage'
+import { Image, Dimensions } from 'react-native'
+import { useState, useEffect } from 'react';
+import { manipulateAsync, SaveFormat } from 'expo-image-manipulator';
+const hash = require('hash-string')
 
+const { height, width } = Dimensions.get('window');
+const ITEM_WIDTH = width * 0.8;
 
-function CachedImage(props) {
-  const [cachedDic, setCachedDic] = useState({})
-  const { url, style, blurRadius, name, index } = props
-  const { image, error, loading } = useCompressedImage(url, setCachedDic)
-  if (loading) {
-      return <Text>Loading...</Text>
-  }
+function useCompressedImage(url, setCachedDic) {
+    const [image, setImage] = useState(null)
+    const [error, setError] = useState(null)
+    const [loading, setLoading] = useState(true)
 
-  if (error) {
-      return <Text>{error.toString()}</Text>
-  }
-
-  console.log(`${index}: CachedImage ${name} Rendered`)
-  //console.log(`cachedDic ${cachedDic}`)
-  return (
-    <Animated.Image style={style} source={{ uri: image.uri }} blurRadius={blurRadius} />
-  )
+    useEffect(() => {
+      async function fetchImage() {
+        try {
+          const compressedImage = await manipulateAsync(
+              url,
+              [ {resize: { width: ITEM_WIDTH } }],
+              { compress: 0.25, format: SaveFormat.JPEG }
+          )
+          //Image.getSize(compressedImage.uri, (width, height) => {console.log(`width: ${width} height: ${height}`)})
+          setImage(compressedImage)
+          setLoading(false)
+        } catch (error) {
+          setError(error)
+          setLoading(false)
+        }
+      }
+      const hashedUrl = hash(url)
+      setCachedDic('hello')
+      fetchImage()
+      console.log("fetchImage CALLED")
+    }, [url])
+    return { image, error, loading }
 }
 
-export default memo(CachedImage)
-
-
+export default useCompressedImage
 
 
 
