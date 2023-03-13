@@ -7,7 +7,7 @@ const CELL_HEIGHT = height * 0.8
 
 const _keyExtractor = (item, index) => `${item.title}${index}`
 
-const BackgroundImagesListScroll = ({articles, scrollX}) => {
+const BackgroundImagesListScroll = ({ articles, scrollX }) => {
   const renderItem = ({ item, index }) => {
     console.log(`${index}: ${item.title} BackgroundImage rendered.....`)
     const translateX = scrollX.interpolate({
@@ -21,11 +21,11 @@ const BackgroundImagesListScroll = ({articles, scrollX}) => {
     return (
       <CachedImage
         key={`image-feed-${index}`}
-        url={ item.imageURL}
+        url={item.imageURL}
         name={item.title}
         index={index}
         style={{
-          translateX,
+          transform: [{ translateX }],
           //opacity,
           width: width,
           height: CELL_HEIGHT,
@@ -46,11 +46,11 @@ const BackgroundImagesListScroll = ({articles, scrollX}) => {
         width: width
       }}
       getItemLayout={(data, index) => (
-        {length: width, offset: width * index, index}
+        { length: width, offset: width * index, index }
       )}
       scrollEnabled={false}
       removeClippedSubviews={false}
-      renderItem = {renderItem}
+      renderItem={renderItem}
     />
   )
 }
