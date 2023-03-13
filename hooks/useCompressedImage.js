@@ -1,39 +1,39 @@
 import { Image, Dimensions } from 'react-native'
 import { useState, useEffect } from 'react';
 import { manipulateAsync, SaveFormat } from 'expo-image-manipulator';
-const hash = require('hash-string')
+//const hash = require('hash-string')
 
 const { height, width } = Dimensions.get('window');
 const ITEM_WIDTH = width * 0.8;
 
 function useCompressedImage(url, setCachedDic) {
-    const [image, setImage] = useState(null)
-    const [error, setError] = useState(null)
-    const [loading, setLoading] = useState(true)
+  const [image, setImage] = useState(null)
+  const [error, setError] = useState(null)
+  const [loading, setLoading] = useState(true)
 
-    useEffect(() => {
-      async function fetchImage() {
-        try {
-          //png = lossless, jpeg = loss but faster
-          const compressedImage = await manipulateAsync(
-              url,
-              [ {resize: { width: ITEM_WIDTH } }],
-              { compress: 0.25, format: SaveFormat.PNG }
-          )
-          //Image.getSize(compressedImage.uri, (width, height) => {console.log(`width: ${width} height: ${height}`)})
-          setImage(compressedImage)
-          setLoading(false)
-        } catch (error) {
-          setError(error)
-          setLoading(false)
-        }
+  useEffect(() => {
+    async function fetchImage() {
+      try {
+        //png = lossless, jpeg = loss but faster
+        const compressedImage = await manipulateAsync(
+          url,
+          [{ resize: { width: ITEM_WIDTH } }],
+          { compress: 0.25, format: SaveFormat.PNG }
+        )
+        //Image.getSize(compressedImage.uri, (width, height) => {console.log(`width: ${width} height: ${height}`)})
+        setImage(compressedImage)
+        setLoading(false)
+      } catch (error) {
+        setError(error)
+        setLoading(false)
       }
-      const hashedUrl = hash(url)
-      setCachedDic('hello')
-      fetchImage()
-      console.log("fetchImage CALLED")
-    }, [url])
-    return { image, error, loading }
+    }
+    //const hashedUrl = hash(url)
+    setCachedDic('hello')
+    fetchImage()
+    console.log("fetchImage CALLED")
+  }, [url])
+  return { image, error, loading }
 }
 
 export default useCompressedImage
