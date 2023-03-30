@@ -1,49 +1,75 @@
-import React, { memo } from 'react';
+import React, { memo, useEffect, useState, useContext } from 'react';
 import { View, Text, Dimensions, Animated, StyleSheet } from 'react-native';
-import CachedImage from './CachedImage';
+import CacheImage from './CacheImage';
+import { CachedImageDicContext } from '../data/CachedImageContext'
+import CompressImage from '../hooks/CompressImage'
+import * as Crypto from 'expo-crypto'
 const TEXT_SPACING = 5;
 const { height, width } = Dimensions.get('window');
 const ITEM_WIDTH = width * 0.8;
-const IMAGE_HEIGHT = 429*(ITEM_WIDTH/762)-1;
-const CARD_LEFT = ITEM_WIDTH/8;
+const IMAGE_HEIGHT = 429 * (ITEM_WIDTH / 762) - 1;
+const CARD_LEFT = ITEM_WIDTH / 8;
 const VERTICAL_CELL_HEIGHT = height * 0.8;
 const ARTICLE_CARD_HEIGHT = VERTICAL_CELL_HEIGHT * 0.8;
 
 const VISIBLE_ITEMS = 3;
-const NEG_OUTPUT_RANGE = -ITEM_WIDTH*.9;
-const POS_OUTPUT_RANGE = ITEM_WIDTH*.5;
-const OPACITY_OUTPUT_RANGE = 1-1/VISIBLE_ITEMS;
+const NEG_OUTPUT_RANGE = -ITEM_WIDTH * .9;
+const POS_OUTPUT_RANGE = ITEM_WIDTH * .5;
+const OPACITY_OUTPUT_RANGE = 1 - 1 / VISIBLE_ITEMS;
 
 const shadowColor = {
-  "cnn" : 'red',
-  "fox" : 'blue',
+  "cnn": 'red',
+  "fox": 'blue',
 };
 
-const ArticleCard = ({item, index, scrollX}) => {
+//function ArticleCard(item, index, scrollX) {
+function ArticleCard(props) {
+
+  const { cacheDic, updateDic } = useContext(CachedImageDicContext)
+  const [imageUri, setImageUri] = useState(null)
+
+  useEffect(() => {
+    const handleUpdateDictionary = async () => {
+      const imageKey = await Crypto.digestStringAsync(Crypto.CryptoDigestAlgorithm.SHA256, props.item.imageURL)
+      if (cacheDic[imageKey]) {
+        console.log("inside")
+        setImageUri(cacheDic[imageKey])
+        //return cacheDic[imageKey]
+      } else {
+        console.log("Gotta Fetch......")
+        const imageUri = await CompressImage(props.item.imageURL)
+        updateDic(imageKey, imageUri)
+        setImageUri(imageUri)
+        //return value
+      }
+    }
+    handleUpdateDictionary()
+  }, []) //item? 
+
   const inputRange = [
-    (index - 1) * ITEM_WIDTH, //item behind (right)
-    index * ITEM_WIDTH, //current item
-    (index + 1) * ITEM_WIDTH, //item front (left)
+    (props.index - 1) * ITEM_WIDTH, //item behind (right)
+    props.index * ITEM_WIDTH, //current item
+    (props.index + 1) * ITEM_WIDTH, //item front (left)
   ];
-  const translateY = scrollX.interpolate({
+  const translateY = props.scrollX.interpolate({
     inputRange,
     outputRange: [-25, 0, 25],
   });
-  const translateX = scrollX.interpolate({
+  const translateX = props.scrollX.interpolate({
     inputRange,
     //outputRange: [-50, 0, 10]
     outputRange: [NEG_OUTPUT_RANGE, 0, POS_OUTPUT_RANGE],
   });
-  const opacity = scrollX.interpolate({
+  const opacity = props.scrollX.interpolate({
     inputRange,
     outputRange: [OPACITY_OUTPUT_RANGE, 1, 0],
   });
-  const scale = scrollX.interpolate({
+  const scale = props.scrollX.interpolate({
     inputRange,
     outputRange: [.95, 1, 1.5],
     //extrapolate: 'clamp'
   });
-  console.log('Article Card Rendered')
+  //console.log('Article Card Rendered')
   return (
     <Animated.View
       style={{
@@ -52,9 +78,9 @@ const ArticleCard = ({item, index, scrollX}) => {
         overflow: 'hidden',
         backgroundColor: 'white',
         borderRadius: 16,
-        borderColor: shadowColor[item.publisher],
+        borderColor: shadowColor[props.item.publisher],
         borderWidth: 1,
-        shadowColor: shadowColor[item.publisher],
+        shadowColor: shadowColor[props.item.publisher],
         shadowOpacity: .1,
         shadowOffset: {
           width: 0,
@@ -62,23 +88,24 @@ const ArticleCard = ({item, index, scrollX}) => {
         },
         shadowRadius: 4,
         elevation: 15,
-        transform: [{ translateX }, { translateY }, { scale } ],
+        transform: [{ translateX }, { translateY }, { scale }],
         opacity,
         left: CARD_LEFT,
 
       }}
     >
-      <CachedImage
-        key={`image-card-${index}`}
+      <CacheImage
+        key={`image-card-${props.index}`}
         style={{
           width: ITEM_WIDTH,
           height: IMAGE_HEIGHT,
           //resizeMode: 'cover',
         }}
-        url={item.imageURL}
+        //uri={item.imageURL}
+        uri={imageUri}
         blurRadius={0}
-        name={item.title}
-        index={index}
+        name={props.item.title}
+        index={props.index}
       />
       <View
         style={styles.textContainer}
@@ -87,19 +114,19 @@ const ArticleCard = ({item, index, scrollX}) => {
           numberOfLines={3}
           style={styles.articleTitleText}
         >
-          {item.title}
+          {props.item.title}
         </Text>
         <Text
           adjustsFontSizeToFit
           style={styles.articleDateText}>
-          {item.date}
+          {props.item.date}
         </Text>
         <Text
           //numberOfLines={4}
           adjustsFontSizeToFit
           style={styles.articleDescriptionText}
         >
-          {item.description}
+          {props.item.description}
         </Text>
       </View>
     </Animated.View>

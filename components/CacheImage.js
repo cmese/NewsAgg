@@ -1,32 +1,25 @@
-import React, { useState, useEffect, useRef, memo } from 'react';
+import React, { useState, useEffect, useRef, useContext, memo } from 'react';
 import { View, Animated, Text } from 'react-native';
 //import { shorthash } from 'shorthash';
-//const hash = require('hash-string')
 //import * as FileSystem from 'expo-file-system';
 //import { manipulateAsync, SaveFormat } from 'expo-image-manipulator';
-import useCompressedImage from '../hooks/useCompressedImage'
+import useCompressedImage from '../hooks/CompressImage'
+import { CachedImageDicContext } from '../data/CachedImageContext';
 
+//key = hash(name)
+//value = uri
+function CacheImage(props) {
+  const { uri, style, blurRadius, name, index } = props
+  //const { imageUri, error, loading } = useCompressedImage(url, name, index)
 
-function CachedImage(props) {
-  const [cachedDic, setCachedDic] = useState({})
-  const { url, style, blurRadius, name, index } = props
-  const { image, error, loading } = useCompressedImage(url, setCachedDic)
-  if (loading) {
-      return <Text>Loading...</Text>
-  }
-
-  if (error) {
-      return <Text>{error.toString()}</Text>
-  }
-
-  console.log(`${index}: CachedImage ${name} Rendered`)
+  //console.log(`${index}: ${name} ......CachedImage Rendered`)
   //console.log(`cachedDic ${cachedDic}`)
   return (
-    <Animated.Image style={style} source={{ uri: image.uri }} blurRadius={blurRadius} />
+    <Animated.Image style={style} source={{ uri: uri }} blurRadius={blurRadius} />
   )
 }
 
-export default memo(CachedImage)
+export default memo(CacheImage)
 
 
 

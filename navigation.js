@@ -21,10 +21,18 @@ const Loading = () => (
 );
 
 const FeedCategoryFilter = ({ route }) => {
-  const data = useFetchData();
-  if (data.length === 0) {
-    return <Loading />;
+  const { data, isLoading, error } = useFetchData();
+  if (isLoading) {
+    return <Loading />
   }
+
+  if (error) {
+    console.log(error.message)
+    return <View><Text>Error: {error.message}</Text></View>
+  }
+  //if (data.length === 0) {
+  //  return <Loading />;
+  //}
   const { category } = route.params;
 
   //filter by trend categories
@@ -38,7 +46,7 @@ const FeedCategoryFilter = ({ route }) => {
     });
   */
   return (
-    <FeedScreen data={filteredData}/>
+    <FeedScreen data={filteredData} />
   );
 }
 
@@ -54,9 +62,9 @@ const CustomDrawerContent = (props) => {
   return (
     <DrawerContentScrollView {...props}>
       <Animated.View style={{ transform: [{ translateX }] }}>
-    {/*<DrawerItem placeholder for quick search /> */}
+        {/*<DrawerItem placeholder for quick search /> */}
         <DrawerItemList {...props} />
-    {/*<DrawerItem label="Help" onPress={() => alert('Link to help')} /> */}
+        {/*<DrawerItem label="Help" onPress={() => alert('Link to help')} /> */}
       </Animated.View>
     </DrawerContentScrollView>
   );
@@ -76,7 +84,7 @@ const NavDrawer = () => {
         }}
       >
         {
-          DrawerData.map( drawerItem =>
+          DrawerData.map(drawerItem =>
             <Drawer.Screen
               key={drawerItem.name}
               name={drawerItem.name}
@@ -98,7 +106,7 @@ const NavDrawer = () => {
                     }}
                   />
                 ),
-                drawerIcon: ({focused}) => {
+                drawerIcon: ({ focused }) => {
                   var IconTypeTag = drawerItem.iconType;
                   return (
                     <IconTypeTag
@@ -113,7 +121,7 @@ const NavDrawer = () => {
             />
           )
         }
-    {/*<Drawer.Screen name="Article" component={Article} />*/}
+        {/*<Drawer.Screen name="Article" component={Article} />*/}
       </Drawer.Navigator>
     </NavigationContainer>
   );

@@ -1,27 +1,55 @@
-import { useRef, memo } from 'react'
+import { useRef, memo, useContext, useEffect, useState } from 'react'
 import { Dimensions, View, StyleSheet, FlatList, Animated } from 'react-native'
-import CachedImage from './CachedImage'
+import { CachedImageDicContext } from '../data/CachedImageContext'
+import CompressImage from '../hooks/CompressImage'
+import CacheImage from './CacheImage'
+import * as Crypto from 'expo-crypto'
 const { height, width } = Dimensions.get('window')
 const ITEM_WIDTH = width * 0.8
 const CELL_HEIGHT = height * 0.8
 
 const _keyExtractor = (item, index) => `${item.title}${index}`
 
-const BackgroundImagesListScroll = ({ articles, scrollX }) => {
+//check / update global cache dic here in renderItem 
+//function BackgroundImagesListScroll(articles, scrollX) {
+function BackgroundImagesListScroll(props) {
+  const { cacheDic, updateDic } = useContext(CachedImageDicContext)
+  const [imageUris, setImageUris] = useState([])
+
+  useEffect(() => {
+    const handleUpdateDictionary = async () => {
+      const urls = await Promise.all(props.articles.map(async (item) => {
+        const imageKey = await Crypto.digestStringAsync(Crypto.CryptoDigestAlgorithm.SHA256, item.imageURL)
+        if (cacheDic[imageKey]) {
+          console.log("inside")
+          return cacheDic[imageKey]
+        } else {
+          console.log("Gotta Fetch......")
+          const imageUri = await CompressImage(item.imageURL)
+          updateDic(imageKey, imageUri)
+          return imageUri
+        }
+      }))
+      setImageUris(urls)
+    }
+    handleUpdateDictionary()
+  }, []) //articles?
+
+
   const renderItem = ({ item, index }) => {
-    console.log(`${index}: ${item.title} BackgroundImage rendered.....`)
-    const translateX = scrollX.interpolate({
+    //console.log(`${index}: ${item.title} BackgroundImage rendered.....`)
+    const translateX = props.scrollX.interpolate({
       inputRange: [0, ITEM_WIDTH],
       outputRange: [0, -width]
     })
-    const opacity = scrollX.interpolate({
+    const opacity = props.scrollX.interpolate({
       inputRange: [0, ITEM_WIDTH],
       outputRange: [1, 0]
     })
     return (
-      <CachedImage
+      <CacheImage
         key={`image-feed-${index}`}
-        url={item.imageURL}
+        uri={imageUris[index]} //change this to uri, item.imageurl should be a prop to handleupdatedic
         name={item.title}
         index={index}
         style={{
@@ -35,7 +63,7 @@ const BackgroundImagesListScroll = ({ articles, scrollX }) => {
   }
   return (
     <Animated.FlatList
-      data={articles}
+      data={props.articles}
       keyExtractor={_keyExtractor}
       horizontal
       style={{

@@ -4,6 +4,7 @@ import 'react-native-gesture-handler';
 import React from 'react'
 import { StyleSheet, View, Text, Platform, StatusBar, Dimensions } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context';
+
 //import { SafeAreaProvider } from 'react-native-safe-area-context';
 import NavDrawer from './navigation'
 
