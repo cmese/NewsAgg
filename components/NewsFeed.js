@@ -16,20 +16,20 @@ const NewsFeed = ({ data }) => {
     <View>
       <AnimatedHeader
         scrollY={scrollYAnimated}
-        data={data.slice(15, 16)}
-        //data={data}
+        //data={data.slice(15, 16)}
+        data={data}
         verticalScrollDistance={VERTICAL_CELL_HEIGHT}
       />
       <Animated.FlatList
-        data={data.slice(15, 16)}
-        //data={data}
+        //data={data.slice(15, 16)}
+        data={data}
         keyExtractor={_keyExtractor}
         showsVerticalScrollIndicator={false}
         snapToInterval={VERTICAL_CELL_HEIGHT}
-        maxToRenderPerBatch={5}
+        //maxToRenderPerBatch={5}
         windowSize={5}
         removeClippedSubviews={true}
-        initialNumToRender={10}
+        initialNumToRender={5}
         snapToAlignment={'start'}
         decelerationRate={'fast'}
         getItemLayout={(data, index) => (

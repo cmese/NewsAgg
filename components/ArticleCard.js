@@ -23,21 +23,22 @@ const shadowColor = {
 };
 
 //function ArticleCard(item, index, scrollX) {
-function ArticleCard(props) {
-
+//function ArticleCard(props) {
+const ArticleCard = ({ item, index, scrollX, compressedImageUri }) => {
+  /*
   const { cacheDic, updateDic } = useContext(CachedImageDicContext)
   const [imageUri, setImageUri] = useState(null)
 
   useEffect(() => {
     const handleUpdateDictionary = async () => {
-      const imageKey = await Crypto.digestStringAsync(Crypto.CryptoDigestAlgorithm.SHA256, props.item.imageURL)
+      const imageKey = await Crypto.digestStringAsync(Crypto.CryptoDigestAlgorithm.SHA256, item.imageURL)
       if (cacheDic[imageKey]) {
         console.log("inside")
         setImageUri(cacheDic[imageKey])
         //return cacheDic[imageKey]
       } else {
-        console.log("Gotta Fetch......")
-        const imageUri = await CompressImage(props.item.imageURL)
+        console.log("Gotta Fetch Article Image......")
+        const imageUri = await CompressImage(item.imageURL)
         updateDic(imageKey, imageUri)
         setImageUri(imageUri)
         //return value
@@ -45,26 +46,27 @@ function ArticleCard(props) {
     }
     handleUpdateDictionary()
   }, []) //item? 
+  */
 
   const inputRange = [
-    (props.index - 1) * ITEM_WIDTH, //item behind (right)
-    props.index * ITEM_WIDTH, //current item
-    (props.index + 1) * ITEM_WIDTH, //item front (left)
+    (index - 1) * ITEM_WIDTH, //item behind (right)
+    index * ITEM_WIDTH, //current item
+    (index + 1) * ITEM_WIDTH, //item front (left)
   ];
-  const translateY = props.scrollX.interpolate({
+  const translateY = scrollX.interpolate({
     inputRange,
     outputRange: [-25, 0, 25],
   });
-  const translateX = props.scrollX.interpolate({
+  const translateX = scrollX.interpolate({
     inputRange,
     //outputRange: [-50, 0, 10]
     outputRange: [NEG_OUTPUT_RANGE, 0, POS_OUTPUT_RANGE],
   });
-  const opacity = props.scrollX.interpolate({
+  const opacity = scrollX.interpolate({
     inputRange,
     outputRange: [OPACITY_OUTPUT_RANGE, 1, 0],
   });
-  const scale = props.scrollX.interpolate({
+  const scale = scrollX.interpolate({
     inputRange,
     outputRange: [.95, 1, 1.5],
     //extrapolate: 'clamp'
@@ -78,9 +80,9 @@ function ArticleCard(props) {
         overflow: 'hidden',
         backgroundColor: 'white',
         borderRadius: 16,
-        borderColor: shadowColor[props.item.publisher],
+        borderColor: shadowColor[item.publisher],
         borderWidth: 1,
-        shadowColor: shadowColor[props.item.publisher],
+        shadowColor: shadowColor[item.publisher],
         shadowOpacity: .1,
         shadowOffset: {
           width: 0,
@@ -95,17 +97,17 @@ function ArticleCard(props) {
       }}
     >
       <CacheImage
-        key={`image-card-${props.index}`}
+        key={`image-card-${index}`}
         style={{
           width: ITEM_WIDTH,
           height: IMAGE_HEIGHT,
           //resizeMode: 'cover',
         }}
         //uri={item.imageURL}
-        uri={imageUri}
+        uri={compressedImageUri}
         blurRadius={0}
-        name={props.item.title}
-        index={props.index}
+      //name={item.title}
+      //index={index}
       />
       <View
         style={styles.textContainer}
@@ -114,19 +116,19 @@ function ArticleCard(props) {
           numberOfLines={3}
           style={styles.articleTitleText}
         >
-          {props.item.title}
+          {item.title}
         </Text>
         <Text
           adjustsFontSizeToFit
           style={styles.articleDateText}>
-          {props.item.date}
+          {item.date}
         </Text>
         <Text
           //numberOfLines={4}
           adjustsFontSizeToFit
           style={styles.articleDescriptionText}
         >
-          {props.item.description}
+          {item.description}
         </Text>
       </View>
     </Animated.View>

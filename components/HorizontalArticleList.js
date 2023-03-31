@@ -1,8 +1,9 @@
-import React, { memo } from 'react'
+import React, { memo, useEffect, useState } from 'react'
 import { View, Dimensions, Animated } from 'react-native'
 import ArticleCard from './ArticleCard';
 import PublisherCarousel from './PublisherCarousel';
 import BackgroundImagesListScroll from './BackgroundImagesListScroll';
+import CompressImage from '../hooks/CompressImage';
 const { height, width } = Dimensions.get('window');
 const EMPTY_ITEM_SIZE = width * .2;
 const ITEM_WIDTH = width * 0.8;
@@ -18,7 +19,20 @@ const CELL_MARGIN_RIGHT = -(width / 2 - width / 7 / 2);
 
 //check / update global cache dic here in renderItem 
 const HorizontalArticleList = ({ item, keyExtractor }) => {
+  const [imageUris, setImageUris] = useState([])
   const scrollX = React.useRef(new Animated.Value(0)).current
+
+  useEffect(() => {
+    const compressImages = async () => {
+      const compressedImageUris = await Promise.all(item.articles.map(async (article) => {
+        const imageUri = await CompressImage(article.imageURL)
+        return imageUri
+      }))
+      setImageUris(compressedImageUris)
+    }
+    compressImages()
+  }, [])
+
   const renderItem = ({ item, index }) => {
     if (item.key === 'empty-right') {
       return <View style={{ width: EMPTY_ITEM_SIZE }} />
@@ -28,6 +42,7 @@ const HorizontalArticleList = ({ item, keyExtractor }) => {
         item={item}
         index={index}
         scrollX={scrollX}
+        compressedImageUri={imageUris[index]}
       />
     )
   }
@@ -39,7 +54,7 @@ const HorizontalArticleList = ({ item, keyExtractor }) => {
         height: VERTICAL_CELL_HEIGHT,
         width: width
       }}>
-      <BackgroundImagesListScroll articles={item.articles} scrollX={scrollX} />
+      <BackgroundImagesListScroll scrollX={scrollX} compressedImageUris={imageUris} />
       <Animated.FlatList
         data={[...item.articles, { key: 'empty-right' }]}
         keyExtractor={keyExtractor}
@@ -47,7 +62,7 @@ const HorizontalArticleList = ({ item, keyExtractor }) => {
         showsHorizontalScrollIndicator={false}
         //maxToRenderPerBatch={3}
         snapToInterval={ITEM_WIDTH}
-        snapToAlignment={'start'}
+        snapToAlignment={'start'} //what about deceleratonRate?
         style={{
           //flexBasis: '50%',
         }}

@@ -8,8 +8,8 @@ import { CachedImageDicContext } from '../data/CachedImageContext';
 
 //key = hash(name)
 //value = uri
-function CacheImage(props) {
-  const { uri, style, blurRadius, name, index } = props
+const CacheImage = ({ uri, style, blurRadius }) => {
+  //const { uri, style, blurRadius, name, index } = props
   //const { imageUri, error, loading } = useCompressedImage(url, name, index)
 
   //console.log(`${index}: ${name} ......CachedImage Rendered`)
