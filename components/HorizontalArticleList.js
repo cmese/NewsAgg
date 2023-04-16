@@ -1,6 +1,7 @@
 import React, { memo, useEffect, useState } from 'react'
 import { View, Dimensions, Animated } from 'react-native'
 import ArticleCard from './ArticleCard';
+import ArticleCardList from './ArticleCardList';
 import PublisherCarousel from './PublisherCarousel';
 import BackgroundImagesListScroll from './BackgroundImagesListScroll';
 import CompressImage from '../hooks/CompressImage';
@@ -17,10 +18,12 @@ const MIN_CELL_HEIGHT = VERTICAL_CELL_HEIGHT * .10;
 const CELL_MARGIN_RIGHT = -(width / 2 - width / 7 / 2);
 
 
-//check / update global cache dic here in renderItem 
-const HorizontalArticleList = ({ item, keyExtractor }) => {
+const HorizontalArticleList = ({ item }) => {
   const [imageUris, setImageUris] = useState([])
   const scrollX = React.useRef(new Animated.Value(0)).current
+  const publishers = item.articles.map((article) => {
+    return article.publisher
+  })
 
   useEffect(() => {
     const compressImages = async () => {
@@ -33,19 +36,6 @@ const HorizontalArticleList = ({ item, keyExtractor }) => {
     compressImages()
   }, [])
 
-  const renderItem = ({ item, index }) => {
-    if (item.key === 'empty-right') {
-      return <View style={{ width: EMPTY_ITEM_SIZE }} />
-    }
-    return (
-      <ArticleCard
-        item={item}
-        index={index}
-        scrollX={scrollX}
-        compressedImageUri={imageUris[index]}
-      />
-    )
-  }
   return (
     <View
       style={{
@@ -55,49 +45,12 @@ const HorizontalArticleList = ({ item, keyExtractor }) => {
         width: width
       }}>
       <BackgroundImagesListScroll scrollX={scrollX} compressedImageUris={imageUris} />
-      <Animated.FlatList
-        data={[...item.articles, { key: 'empty-right' }]}
-        keyExtractor={keyExtractor}
-        horizontal
-        showsHorizontalScrollIndicator={false}
-        //maxToRenderPerBatch={3}
-        snapToInterval={ITEM_WIDTH}
-        snapToAlignment={'start'} //what about deceleratonRate?
-        style={{
-          //flexBasis: '50%',
-        }}
-        removeClippedSubviews={false}
-        contentContainerStyle={{
-          alignItems: 'center',
-        }}
-        onScroll={Animated.event(
-          [{ nativeEvent: { contentOffset: { x: scrollX } } }],
-          { useNativeDriver: true }
-        )}
-        getItemLayout={(data, index) => (
-          { length: ITEM_WIDTH, offset: ITEM_WIDTH * index, index }
-        )}
-        CellRendererComponent={({ children, index, style, ...props }) => {
-          const cellStyle = [
-            style,
-            {
-              zIndex: item.articles.length - index,
-              elevation: item.articles.length - index,
-            },
-          ]
-          return (
-            <View style={cellStyle} index={index} {...props}>
-              {children}
-            </View>
-          )
-        }}
-        renderItem={renderItem}
-      />
+      <ArticleCardList scrollX={scrollX} articles={item.articles} compressedImageUris={imageUris} />
       <View style={{
         minHeight: MIN_CELL_HEIGHT,
-        marginRight: CELL_MARGIN_RIGHT,
+        //marginRight: CELL_MARGIN_RIGHT,
       }}>
-        <PublisherCarousel articles={item.articles} scrollX={scrollX} scrollWidth={ITEM_WIDTH} />
+        <PublisherCarousel publishers={publishers} scrollX={scrollX} scrollWidth={ITEM_WIDTH} />
       </View>
     </View>
   )

@@ -1,10 +1,11 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { StyleSheet, Text, View, Animated } from 'react-native';
 
 const HEADER_HEIGHT = 70;
 const TEXT_SPACING = 15;
 
 const AnimatedHeader = ({ scrollY, data, verticalScrollDistance }) => {
+
   const translateY = scrollY.interpolate({
     inputRange: [0, verticalScrollDistance],
     outputRange: [0, -HEADER_HEIGHT],

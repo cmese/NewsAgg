@@ -1,81 +1,96 @@
-import React from 'react';
-import { StyleSheet, Text, View, Image, FlatList, Animated, Dimensions } from 'react-native';
+import React, { useRef, useState } from 'react'
+import { StyleSheet, Text, View, Animated, Dimensions } from 'react-native'
 
-const { width } = Dimensions.get('window');
-const SPACING = 10;
-const ITEM_SIZE = width/7;
-const HORZ_PADDING = width/2 - width/7/2;
+const { width } = Dimensions.get('window')
+const ITEM_SPACING = 20
+const CARD_WIDTH = width * 0.8
+const PUB_WIDTH = width * 0.2;
+//const ITEM_SIZE = 80
+//const ITEM_CENTER = ITEM_SIZE + ITEM_SPACING
 
-const PublisherCarousel = ({articles, scrollX, scrollWidth}) => {
+
+//const NEG_OUTPUT_RANGE = -ITEM_SIZE * .9;
+//const POS_OUTPUT_RANGE = ITEM_SIZE * .9;
+
+//const HORZ_PADDING = width / 2 - width / 7 / 2
+
+const _keyExtractor = (item, index) => `${item}${index}`
+
+const PublisherCarousel = ({ publishers, scrollX, scrollWidth }) => {
+
+  const pubCarouselWidth = PUB_WIDTH * publishers.length
+
+  const translateX = scrollX.interpolate({
+    inputRange: [0, width],
+    outputRange: [0, -PUB_WIDTH * 2 + ITEM_SPACING / 2]
+    //extrapolate: 'clamp'
+  })
+  //  const translateX = scrollX.interpolate({
+  //    inputRange: [-1, 0, 1],
+  //    outputRange: [
+  //      ITEM_CENTER,
+  //      0,
+  //      -ITEM_CENTER
+  //    ],
+  //    extrapolate: 'clamp'
+  //  })
+
+  const renderItem = ({ item, index }) => {
+    return (
+      <Animated.View
+        //style={{ width: ITEM_SIZE, height: ITEM_SIZE, transform: [{ translateX }], backgroundColor: 'green', marginHorizontal: 0 }}
+        style={{
+          transform: [{ translateX }],
+          //left: width / 2 - PUB_WIDTH / 2,
+          backgroundColor: 'pink',
+          padding: ITEM_SPACING
+
+        }}
+      >
+        <Text style={styles.publisherName}>{item}</Text>
+      </Animated.View>
+    )
+  }
   return (
-    <Animated.FlatList
-      data={articles}
-      keyExtractor={(_, index) => String(index)}
-      horizontal
-      contentContainerStyle={{
-        alignItems: 'center',
-        //backgroundColor: 'pink',
-        paddingHorizontal: HORZ_PADDING,
-      }}
-      scrollEnabled={false}
-      renderItem={({item, index}) => {
-        const inputRange = [
-          (index - 2) * scrollWidth,
-          (index - 1) * scrollWidth,
-          index * scrollWidth,
-          (index + 1) * scrollWidth,
-          (index + 2) * scrollWidth
-        ];
-        const translateX = scrollX.interpolate({
-          inputRange,
-          outputRange: [
-            (index - 2) * -ITEM_SIZE,
-            (index - 1) * -ITEM_SIZE,
-            index * -ITEM_SIZE,
-            (index + 1) * -ITEM_SIZE,
-            (index + 2) * -ITEM_SIZE,
-          ]
-        });
-        const scale = scrollX.interpolate({
-          inputRange,
-          outputRange: [0.5, 1, 1.5, 1, 0.5],
-          extrapolate: "clamp",
-        });
-        return (
-          <Animated.View
-            style={{
-              width: ITEM_SIZE,
-              borderRadius: 23,
-              borderColor: 'black',
-              overflow: 'visible',
-              transform: [
-                { translateX },
-                { scale }
-              ],
-            }}
-          >
-            <View
-              style={{
-              marginHorizontal: SPACING,
-              backgroundColor: 'yellow',
-              alignItems: 'center',
-              borderRadius: 39,
-              borderWidth: 1,
-              borderColor: 'purple'
-              }}
-            >
-              <Text styles={styles.publisherName}>{item.publisher}</Text>
-            </View>
-          </Animated.View>
-        );
-      }}
-    />
+    <View style={styles.container}>
+      <Animated.FlatList
+        data={publishers}
+        keyExtractor={_keyExtractor}
+        horizontal
+        contentContainerStyle={[styles.contentContainer]}
+        scrollEnabled={false}
+        //onLayout={onFlatListLayout}
+        renderItem={renderItem}
+      // style={{
+      //   transform: [{ translateX: translateX }],
+      //   backgroundColor: 'green'
+      // }}
+      />
+    </View >
   )
 }
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    flexDirection: 'row',
+    backgroundColor: 'orange',
+    //overflow: 'visible',
+    //alignItems: 'center'
+  },
+  contentContainer: {
+    alignItems: 'center',
+    backgroundColor: 'pink',
+    paddingLeft: (width / 2) - (PUB_WIDTH / 2) - ITEM_SPACING,
+  },
   publisherName: {
-
+    width: PUB_WIDTH,
+    height: PUB_WIDTH,
+    borderRadius: PUB_WIDTH / 2,
+    backgroundColor: 'yellow',
+    textAlign: 'center',
+    textAlignVertical: 'center',
+    fontSize: 20
   }
 });
 

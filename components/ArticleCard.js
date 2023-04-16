@@ -1,9 +1,6 @@
-import React, { memo, useEffect, useState, useContext } from 'react';
+import React, { memo, useEffect } from 'react';
 import { View, Text, Dimensions, Animated, StyleSheet } from 'react-native';
 import CacheImage from './CacheImage';
-import { CachedImageDicContext } from '../data/CachedImageContext'
-import CompressImage from '../hooks/CompressImage'
-import * as Crypto from 'expo-crypto'
 const TEXT_SPACING = 5;
 const { height, width } = Dimensions.get('window');
 const ITEM_WIDTH = width * 0.8;
@@ -22,31 +19,7 @@ const shadowColor = {
   "fox": 'blue',
 };
 
-//function ArticleCard(item, index, scrollX) {
-//function ArticleCard(props) {
 const ArticleCard = ({ item, index, scrollX, compressedImageUri }) => {
-  /*
-  const { cacheDic, updateDic } = useContext(CachedImageDicContext)
-  const [imageUri, setImageUri] = useState(null)
-
-  useEffect(() => {
-    const handleUpdateDictionary = async () => {
-      const imageKey = await Crypto.digestStringAsync(Crypto.CryptoDigestAlgorithm.SHA256, item.imageURL)
-      if (cacheDic[imageKey]) {
-        console.log("inside")
-        setImageUri(cacheDic[imageKey])
-        //return cacheDic[imageKey]
-      } else {
-        console.log("Gotta Fetch Article Image......")
-        const imageUri = await CompressImage(item.imageURL)
-        updateDic(imageKey, imageUri)
-        setImageUri(imageUri)
-        //return value
-      }
-    }
-    handleUpdateDictionary()
-  }, []) //item? 
-  */
 
   const inputRange = [
     (index - 1) * ITEM_WIDTH, //item behind (right)
@@ -71,7 +44,6 @@ const ArticleCard = ({ item, index, scrollX, compressedImageUri }) => {
     outputRange: [.95, 1, 1.5],
     //extrapolate: 'clamp'
   });
-  //console.log('Article Card Rendered')
   return (
     <Animated.View
       style={{
@@ -97,17 +69,13 @@ const ArticleCard = ({ item, index, scrollX, compressedImageUri }) => {
       }}
     >
       <CacheImage
-        key={`image-card-${index}`}
         style={{
           width: ITEM_WIDTH,
           height: IMAGE_HEIGHT,
           //resizeMode: 'cover',
         }}
-        //uri={item.imageURL}
         uri={compressedImageUri}
         blurRadius={0}
-      //name={item.title}
-      //index={index}
       />
       <View
         style={styles.textContainer}

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { StyleSheet, View, Dimensions, Animated } from 'react-native';
 import AnimatedHeader from './AnimatedHeader';
 import HorizontalArticleList from './HorizontalArticleList';
@@ -51,8 +51,8 @@ const NewsFeed = ({ data }) => {
 }
 
 const renderHorizontalListItem = ({ item, index }) => {
-  console.log(`${index}: ${item.name} LIST RENDERED.....NUM_Articles: ${item.articles.length}`)
-  return <HorizontalArticleList item={item} keyExtractor={_keyExtractor} />
+  //console.log(`${index}: ${item.name} LIST RENDERED.....NUM_Articles: ${item.articles.length}`)
+  return <HorizontalArticleList item={item} />
 }
 
 export default NewsFeed
