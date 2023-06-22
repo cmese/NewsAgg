@@ -91,7 +91,7 @@ const NavDrawer = () => {
               initialParams={{ category: drawerItem.name }}
               options={{
                 headerStyle: {
-                  borderRadius: 300,
+                  //borderRadius: 300,
                   height: 45,
                 },
                 headerTitleAlign: 'center',

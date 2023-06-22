@@ -1,6 +1,7 @@
 import React, { memo, useEffect } from 'react';
-import { View, Text, Dimensions, Animated, StyleSheet } from 'react-native';
+import { View, Text, Dimensions, Animated, StyleSheet, Linking } from 'react-native';
 import CacheImage from './CacheImage';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 const TEXT_SPACING = 5;
 const { height, width } = Dimensions.get('window');
 const ITEM_WIDTH = width * 0.8;
@@ -20,39 +21,53 @@ const IMAGE_HEIGHT = 429 * (ITEM_WIDTH / 762) - 1;
 //};
 
 const ArticleCard = ({ style, item, compressedImageUri }) => {
+  const handleCardTap = async () => {
+    const url = item.url
+    
+    try {
+      const supported = await Linking.canOpenURL(url);
+      
+      if (supported) {
+        await Linking.openURL(url);
+      } else {
+        console.log("Cannot open URL");
+      }
+    } catch (error) {
+      console.error("Error opening URL:", error);
+    }
+  };
   return (
     <Animated.View style={style}>
-      <CacheImage
-        style={{
-          width: ITEM_WIDTH,
-          height: IMAGE_HEIGHT,
-          //resizeMode: 'cover',
-        }}
-        uri={compressedImageUri}
-        blurRadius={0}
-      />
-      <View
-        style={styles.textContainer}
-      >
-        <Text
-          numberOfLines={3}
-          style={styles.articleTitleText}
-        >
-          {item.title}
-        </Text>
-        <Text
-          adjustsFontSizeToFit
-          style={styles.articleDateText}>
-          {item.date}
-        </Text>
-        <Text
-          //numberOfLines={4}
-          adjustsFontSizeToFit
-          style={styles.articleDescriptionText}
-        >
-          {item.description}
-        </Text>
-      </View>
+      <TouchableOpacity onPress={handleCardTap}>
+        <CacheImage
+          style={{
+            width: ITEM_WIDTH,
+            height: IMAGE_HEIGHT,
+            //resizeMode: 'cover',
+          }}
+          uri={compressedImageUri}
+        />
+        <View style={styles.textContainer}>
+          <Text
+            numberOfLines={3}
+            style={styles.articleTitleText}
+          >
+            {item.title}
+          </Text>
+          <Text
+            adjustsFontSizeToFit
+            style={styles.articleDateText}>
+            {item.date}
+          </Text>
+          <Text
+            //numberOfLines={4}
+            adjustsFontSizeToFit
+            style={styles.articleDescriptionText}
+          >
+            {item.description}
+          </Text>
+        </View>
+      </TouchableOpacity>
     </Animated.View>
   );
 }

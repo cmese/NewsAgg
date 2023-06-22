@@ -21,21 +21,7 @@ const shadowColor = {
   "fox": 'blue',
 };
 
-const ArticleCardList = ({ scrollX, articles, compressedImageUris, pubScrolling, articlesScrolling, scrollXPub }) => {
-  useEffect(() => {
-    const listenerId = scrollX.addListener(() => {
-      //console.log('Current content offset:', scrollX.__getValue());
-      //console.log(pubScrolling.current)
-      if (scrollX.__getValue() !== 0) {
-        pubScrolling.current = false
-        articlesScrolling.current = true
-      }
-    });
-
-    return () => {
-      scrollX.removeListener(listenerId);
-    };
-  }, [scrollX]);
+const ArticleCardList = ({ scrollX, articles, compressedImageUris }) => {
 
   const renderItem = ({ item, index }) => {
     const inputRange = [

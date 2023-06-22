@@ -3,7 +3,7 @@ import { StyleSheet, View, Dimensions, Animated } from 'react-native';
 import AnimatedHeader from './AnimatedHeader';
 import HorizontalArticleList from './HorizontalArticleList';
 const { height } = Dimensions.get('window');
-const VERTICAL_CELL_HEIGHT = height * 0.8;
+const VERTICAL_CELL_HEIGHT = height * 0.8 + 70;
 
 const _keyExtractor = (item, index) => `${item.name}${index}`;
 
@@ -14,12 +14,6 @@ const NewsFeed = ({ data }) => {
 
   return (
     <View>
-      <AnimatedHeader
-        scrollY={scrollYAnimated}
-        //data={data.slice(15, 16)}
-        data={data}
-        verticalScrollDistance={VERTICAL_CELL_HEIGHT}
-      />
       <Animated.FlatList
         //data={data.slice(15, 16)}
         data={data}
@@ -45,6 +39,12 @@ const NewsFeed = ({ data }) => {
           }
         )}
         renderItem={renderHorizontalListItem}
+      />
+      <AnimatedHeader
+        scrollY={scrollYAnimated}
+        //data={data.slice(15, 16)}
+        data={data}
+        verticalScrollDistance={VERTICAL_CELL_HEIGHT}
       />
     </View>
   )

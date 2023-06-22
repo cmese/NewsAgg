@@ -8,17 +8,20 @@ import CompressImage from '../hooks/CompressImage';
 const { height, width } = Dimensions.get('window');
 const VERTICAL_CELL_HEIGHT = height * 0.8;
 
+const publisherPics = {
+  'fox': require('../assets/fox.jpg'),
+  'cnn': require('../assets/cnn.jpg'),
+  'cnbc': require('../assets/cnbc.jpg'),
+  'nyt': require('../assets/nyt.jpg')
+}
 
 const HorizontalArticleList = ({ item }) => {
   const [imageUris, setImageUris] = useState([])
   const scrollX = useRef(new Animated.Value(0)).current
-  const scrollXPub = useRef(new Animated.Value(0)).current
 
-  const pubScrolling = useRef(false)
-  const articlesScrolling = useRef(false)
 
   const publishers = item.articles.map((article) => {
-    return article.publisher
+    return publisherPics[article.publisher]
   })
 
   useEffect(() => {
@@ -37,12 +40,13 @@ const HorizontalArticleList = ({ item }) => {
       style={{
         flex: 1,
         borderRadius: 10,
-        height: VERTICAL_CELL_HEIGHT,
-        width: width
+        height: VERTICAL_CELL_HEIGHT +70,
+        width: width,
+        borderColor: 'yellow'
       }}>
-      <BackgroundImagesListScroll scrollX={scrollX} compressedImageUris={imageUris} scrollXPub={scrollXPub} pubScrolling={pubScrolling} articlesScrolling={articlesScrolling} />
-      <ArticleCardList scrollX={scrollX} articles={item.articles} compressedImageUris={imageUris} pubScrolling={pubScrolling} articlesScrolling={articlesScrolling} scrollXPub={scrollXPub} />
-      <PublisherCarousel publishers={[...publishers, { key: 'empty-right' }]} scrollX={scrollX} scrollXPub={scrollXPub} pubScrolling={pubScrolling} articlesScrolling={articlesScrolling} />
+      <BackgroundImagesListScroll scrollX={scrollX} compressedImageUris={imageUris} />
+      <ArticleCardList scrollX={scrollX} articles={item.articles} compressedImageUris={imageUris} />
+      <PublisherCarousel publishers={[...publishers, { key: 'empty-right' }]} scrollX={scrollX} />
     </View>
   )
 }

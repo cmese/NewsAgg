@@ -13,6 +13,9 @@ const AnimatedHeader = ({ scrollY, data, verticalScrollDistance }) => {
   return (
     <View
       style={{
+        ...StyleSheet.absoluteFillObject,
+        backgroundColor: 'transparent',
+        //backgroundColor: 'rgba(0, 0, 0, 0.5)',
         height: HEADER_HEIGHT,
         overflow: 'hidden',
       }}
@@ -44,7 +47,7 @@ const styles = StyleSheet.create({
     height: HEADER_HEIGHT,
     justifyContent: 'center',
     paddingLeft: TEXT_SPACING,
-    backgroundColor: 'black',
+    backgroundColor: 'transparent',
   },
   headerText: {
     fontSize: 40,
@@ -52,6 +55,9 @@ const styles = StyleSheet.create({
     textTransform: 'uppercase',
     letterSpacing: -1,
     color: 'white',
+    textShadowColor: 'rgba(0, 0, 0, 0.75)',
+    textShadowOffset: {width: -1, height: 1},
+    textShadowRadius: 10
   },
 });
 
